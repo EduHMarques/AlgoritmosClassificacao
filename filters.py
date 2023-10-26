@@ -61,8 +61,9 @@ def apply_filter(dataset, result, n):
     listaCorte = [result[0][i][1] for i in range(n)]
     dataset = np.delete(dataset, listaCorte, axis = 1)
 
-    print("\nVariáveis deletadas:")
+    print("Variáveis deletadas:")
     for var in listaCorte:
         print(f"Variável {var}")
+    print('')
         
     return dataset

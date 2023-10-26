@@ -67,13 +67,14 @@ def run_filter(dataset, result, numVar, numClusters):
 
 	## Aplicando filtro
     data = apply_filter(data, resultado_filtro, numVar)
+    target = np.hstack((dataset[2], dataset[3]))
 
-    return data
+    return (data, target)
 
-def select_dataset(indexData):
+def select_dataset(indexData, seed):
     if indexData == 1:
         data, target = load_iris(return_X_y=True)
-        data_train, data_test, target_train, target_test = train_test_split(data, target, test_size=0.3, random_state=0)
+        data_train, data_test, target_train, target_test = train_test_split(data, target, test_size=0.3, random_state=seed)
         return (data_train, data_test, target_train, target_test)
 
 def exec_knn(data_train, data_test, target_train, target_test, n_neighbors):
@@ -87,22 +88,19 @@ def exec_knn(data_train, data_test, target_train, target_test, n_neighbors):
 
 if __name__ == "__main__":
 
+    seed = 0
     n_neighbors = 3
     numVar = 1
-    dataset = select_dataset(1)
-
-    result_mfcm = exec_mfcm_filter(dataset, 10, 3)
-
-    filtered_dataset = run_filter(dataset, result_mfcm, numVar, 3)
+    dataset = select_dataset(1, seed)
 
     print('Executando KNN com dataset original')
     r_data_train, r_data_test, r_target_train, r_target_test = dataset
     exec_knn(r_data_train, r_data_test, r_target_train, r_target_test, n_neighbors)
 
+    result_mfcm = exec_mfcm_filter(dataset, 10, 3)
+    filtered_dataset = run_filter(dataset, result_mfcm, numVar, 3)
 
-    # Melhorar o código na questão de datasets crus e filtrados
     print('Executando KNN com dataset filtrado')
-    f_target_train = r_target_train
-    f_target_test = r_target_test
-    f_data_train, f_data_test = train_test_split(filtered_dataset, test_size=0.3, random_state=0)
+    f_data, f_target = filtered_dataset
+    f_data_train, f_data_test, f_target_train, f_target_test = train_test_split(f_data, f_target, test_size=0.3, random_state=seed)
     exec_knn(f_data_train, f_data_test, f_target_train, f_target_test, n_neighbors)
