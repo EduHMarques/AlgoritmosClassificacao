@@ -59,11 +59,11 @@ def exec_mfcm_filter(dataset, nRep, nClusters):
 
     return result
 
-def run_filter(dataset, result, numVar, numClusters):
+def run_filter(dataset, result, numVar, numClasses):
 	
     data = np.vstack((dataset[0], dataset[1]))
 
-    resultado_filtro = variance_filter(data, result['bestM'], numClusters)
+    resultado_filtro = variance_filter(data, result['bestM'], numClasses)
     resultado_filtro[0].sort(key=lambda k : k[0])
 
 	## Aplicando filtro
@@ -112,15 +112,15 @@ if __name__ == "__main__":
 
     seed = 0
     n_neighbors = 3
-    numVar = 6
-    dataset = select_dataset(3, seed)
+    numVar = 10
+    dataset = select_dataset(2, seed)
 
     r_data_train, r_data_test, r_target_train, r_target_test, nClasses, data_name = dataset
     print(f'Executando KNN com dataset original: {data_name}')
     exec_knn(r_data_train, r_data_test, r_target_train, r_target_test, n_neighbors)
 
     result_mfcm = exec_mfcm_filter(dataset, 10, nClasses)
-    filtered_dataset = run_filter(dataset, result_mfcm, numVar, 3)
+    filtered_dataset = run_filter(dataset, result_mfcm, numVar, nClasses)
 
     print(f'Executando KNN com dataset filtrado: {data_name}')
     f_data, f_target = filtered_dataset
