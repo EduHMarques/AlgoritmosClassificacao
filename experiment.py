@@ -3,9 +3,11 @@ import random
 from MFCM import MFCM
 from filters import *
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.model_selection import train_test_split
+from sklearn import preprocessing
 from sklearn.datasets import load_iris, load_digits, load_wine, load_breast_cancer
 from sklearn.metrics import classification_report, f1_score
+from sklearn.model_selection import StratifiedKFold, train_test_split
+from sklearn.model_selection import cross_val_score
 
 def execute(nRep, dataset, centersAll):
     Jmin = 2147483647	# int_max do R
@@ -72,31 +74,31 @@ def run_filter(dataset, result, numVar, numClasses):
 
     return (data, target)
 
-def select_dataset(indexData, seed):
+def select_dataset(indexData):
     if indexData == 1:
         nClasses = 3
         dataset_name = 'Iris'
         data, target = load_iris(return_X_y=True)
-        data_train, data_test, target_train, target_test = train_test_split(data, target, test_size=0.3, random_state=seed)
-        return (data_train, data_test, target_train, target_test, nClasses, dataset_name)
+        data = preprocessing.normalize(data)
+        return (data, target, nClasses, dataset_name)
     if indexData == 2:
         nClasses = 10
         dataset_name = 'Digits'
         data, target = load_digits(return_X_y=True)
-        data_train, data_test, target_train, target_test = train_test_split(data, target, test_size=0.3, random_state=seed)
-        return (data_train, data_test, target_train, target_test, nClasses, dataset_name)
+        data = preprocessing.normalize(data)
+        return (data, target, nClasses, dataset_name)
     if indexData == 3:
         nClasses = 3
         dataset_name = 'Wine'
         data, target = load_wine(return_X_y=True)
-        data_train, data_test, target_train, target_test = train_test_split(data, target, test_size=0.3, random_state=seed)
-        return (data_train, data_test, target_train, target_test, nClasses, dataset_name)
+        # data = preprocessing.normalize(data)
+        return (data, target, nClasses, dataset_name)
     if indexData == 4:
         nClasses = 2
         dataset_name = 'Breast Cancer'
         data, target = load_breast_cancer(return_X_y=True)
-        data_train, data_test, target_train, target_test = train_test_split(data, target, test_size=0.3, random_state=seed)
-        return (data_train, data_test, target_train, target_test, nClasses, dataset_name)
+        # data = preprocessing.normalize(data)
+        return (data, target, nClasses, dataset_name)
 
 def exec_knn(data_train, data_test, target_train, target_test, n_neighbors):
 
@@ -105,24 +107,62 @@ def exec_knn(data_train, data_test, target_train, target_test, n_neighbors):
 
     target_pred = clf.predict(data_test)
     
-    print(classification_report(target_test, target_pred))
-    print(f'F1 Score: {f1_score(target_test, target_pred, average="macro")}')
+    # print(classification_report(target_test, target_pred))
+    # print(f'F1 Score: {f1_score(target_test, target_pred, average="macro")}')
+    return target_pred
+
+def kFold(r_data, r_target, seed):
+
+    sk = StratifiedKFold(n_splits=5, shuffle=True, random_state=seed)
+    best_fold = 0
+    r_data_train, r_data_test, r_target_train, r_target_test = 0, 0, 0, 0
+
+    for train, test in sk.split(r_data, r_target):
+        x_train, x_test = r_data[train], r_data[test]
+        y_train, y_test = r_target[train], r_target[test]
+
+        pred = exec_knn(x_train, x_test, y_train, y_test, n_neighbors)
+        score = f1_score(y_test, pred, average='macro')
+        if score > best_fold:
+            r_data_train, r_data_test, r_target_train, r_target_test = x_train, x_test, y_train, y_test
+            best_fold = score
+
+    print(f'train set size: {len(r_data_train)}')
+    print(f'test set size: {len(r_data_test)}')
+
+    return (r_data_train, r_data_test, r_target_train, r_target_test)
+
 
 if __name__ == "__main__":
 
-    seed = 0
-    n_neighbors = 3
-    numVar = 10
-    dataset = select_dataset(2, seed)
+    seed = 2
+    n_neighbors = 15
+    numVar = 15                      # Número de variáveis a serem cortadas
+    dataset = select_dataset(4)
 
-    r_data_train, r_data_test, r_target_train, r_target_test, nClasses, data_name = dataset
+    # K fold dataset original
+    r_data, r_target, nClasses, data_name = dataset
+    r_data_train, r_data_test, r_target_train, r_target_test = kFold(r_data, r_target, seed)
+
+    # KNN sem filtro
     print(f'Executando KNN com dataset original: {data_name}')
-    exec_knn(r_data_train, r_data_test, r_target_train, r_target_test, n_neighbors)
+    pred = exec_knn(r_data_train, r_data_test, r_target_train, r_target_test, n_neighbors)
+    score = f1_score(r_target_test, pred, average='macro')
+    print(f'Sem filtro - F1 Score: {score}')
 
-    result_mfcm = exec_mfcm_filter(dataset, 10, nClasses)
-    filtered_dataset = run_filter(dataset, result_mfcm, numVar, nClasses)
-
-    print(f'Executando KNN com dataset filtrado: {data_name}')
+    # Execução do filtro
+    dataset_to_filter = (r_data_train, r_data_test, r_target_train, r_target_test)
+    result_mfcm = exec_mfcm_filter(dataset_to_filter, 10, nClasses)
+    filtered_dataset = run_filter(dataset_to_filter, result_mfcm, numVar, nClasses)
+    
+    # K fold dataset filtrado
     f_data, f_target = filtered_dataset
-    f_data_train, f_data_test, f_target_train, f_target_test = train_test_split(f_data, f_target, test_size=0.3, random_state=seed)
-    exec_knn(f_data_train, f_data_test, f_target_train, f_target_test, n_neighbors)
+    f_data_train, f_data_test, f_target_train, f_target_test = kFold(f_data, f_target, seed)
+
+    # KNN com filtro
+    print(f'Executando KNN com dataset filtrado: {data_name}')
+    pred = exec_knn(f_data_train, f_data_test, f_target_train, f_target_test, n_neighbors)
+    score = f1_score(f_target_test, pred, average='macro')
+    print(f'Com filtro - F1 Score: {score}')
+
+

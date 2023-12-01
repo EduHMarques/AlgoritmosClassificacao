@@ -17,10 +17,12 @@ def MFCM(data, centers, parM):
 
   while (Jbefore - J) > 0.0001 and count < maxIteration:
 
+    # print(f'interação interna mfcm: {count}')
+
     count += 1
     
     D = updateDistances(data, P)
-    # print('Distancia atualizadas')
+    # print('Distancias atualizadas')
 
     U = updateMembership(D, parM)
     # print('Membership atualizadas')
@@ -30,7 +32,7 @@ def MFCM(data, centers, parM):
 
     Jbefore = J
     J = updateCriterion(U, D, parM)
-    # print('Criterio atualizados')
+    # print('Criterio atualizado')
 
     Ubefore = U	
 
