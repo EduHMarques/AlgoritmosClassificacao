@@ -4,10 +4,14 @@ from MFCM import MFCM
 from filters import *
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn import preprocessing
+from sklearn.preprocessing import StandardScaler
+
 from sklearn.datasets import load_iris, load_digits, load_wine, load_breast_cancer
 from sklearn.metrics import classification_report, f1_score
 from sklearn.model_selection import StratifiedKFold, train_test_split
 from sklearn.model_selection import cross_val_score
+
+scaler = StandardScaler()
 
 def execute(nRep, dataset, centersAll):
     Jmin = 2147483647	# int_max do R
@@ -79,24 +83,26 @@ def select_dataset(indexData):
         nClasses = 3
         dataset_name = 'Iris'
         data, target = load_iris(return_X_y=True)
-        data = preprocessing.normalize(data)
+        data = scaler.fit_transform(data)
         return (data, target, nClasses, dataset_name)
     if indexData == 2:
         nClasses = 10
         dataset_name = 'Digits'
         data, target = load_digits(return_X_y=True)
-        data = preprocessing.normalize(data)
+        data = scaler.fit_transform(data)
         return (data, target, nClasses, dataset_name)
     if indexData == 3:
         nClasses = 3
         dataset_name = 'Wine'
         data, target = load_wine(return_X_y=True)
+        data = scaler.fit_transform(data)
         # data = preprocessing.normalize(data)
         return (data, target, nClasses, dataset_name)
     if indexData == 4:
         nClasses = 2
         dataset_name = 'Breast Cancer'
         data, target = load_breast_cancer(return_X_y=True)
+        data = scaler.fit_transform(data)
         # data = preprocessing.normalize(data)
         return (data, target, nClasses, dataset_name)
 
@@ -132,13 +138,24 @@ def kFold(r_data, r_target, seed):
 
     return (r_data_train, r_data_test, r_target_train, r_target_test)
 
+def atualizaTxt(nome, lista):
+	arquivo = open(nome, 'a')
+	arquivo.write(lista)
+	arquivo.write('\n')
+	arquivo.close()
 
 if __name__ == "__main__":
 
+    # Parâmetros
     seed = 2
+    indexData = 2
     n_neighbors = 15
     numVar = 15                      # Número de variáveis a serem cortadas
-    dataset = select_dataset(4)
+    nFilterRep = 10 
+
+    metrics_info0 = (f'Seed: {seed} | Dataset: {indexData} | K: {n_neighbors} | NumVar: {numVar} | NFilterRep: {nFilterRep}')
+
+    dataset = select_dataset(indexData)
 
     # K fold dataset original
     r_data, r_target, nClasses, data_name = dataset
@@ -149,10 +166,11 @@ if __name__ == "__main__":
     pred = exec_knn(r_data_train, r_data_test, r_target_train, r_target_test, n_neighbors)
     score = f1_score(r_target_test, pred, average='macro')
     print(f'Sem filtro - F1 Score: {score}')
+    metrics_info1 = (f'Sem filtro - F1 Score: {score}')
 
     # Execução do filtro
     dataset_to_filter = (r_data_train, r_data_test, r_target_train, r_target_test)
-    result_mfcm = exec_mfcm_filter(dataset_to_filter, 10, nClasses)
+    result_mfcm = exec_mfcm_filter(dataset_to_filter, nFilterRep, nClasses)
     filtered_dataset = run_filter(dataset_to_filter, result_mfcm, numVar, nClasses)
     
     # K fold dataset filtrado
@@ -164,5 +182,11 @@ if __name__ == "__main__":
     pred = exec_knn(f_data_train, f_data_test, f_target_train, f_target_test, n_neighbors)
     score = f1_score(f_target_test, pred, average='macro')
     print(f'Com filtro - F1 Score: {score}')
+    metrics_info2 = (f'Com filtro - F1 Score: {score}')
 
+    # Escrevendo no arquivo
 
+    atualizaTxt('logs/resultados.txt', metrics_info0)
+    atualizaTxt('logs/resultados.txt', metrics_info1)
+    atualizaTxt('logs/resultados.txt', metrics_info2)
+    atualizaTxt('logs/resultados.txt', '')

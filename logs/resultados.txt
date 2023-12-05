@@ -1,0 +1,56 @@
+Seed: 2 | Dataset: 3 | K: 15 | NumVar: 3 | NFilterRep: 10
+Sem filtro - F1 Score: 1.0
+Com filtro - F1 Score: 0.9743209876543211
+
+Seed: 2 | Dataset: 3 | K: 15 | NumVar: 4 | NFilterRep: 10
+Sem filtro - F1 Score: 1.0
+Com filtro - F1 Score: 0.9743209876543211
+
+Seed: 2 | Dataset: 3 | K: 15 | NumVar: 5 | NFilterRep: 10
+Sem filtro - F1 Score: 1.0
+Com filtro - F1 Score: 0.944153862918165
+
+Seed: 2 | Dataset: 3 | K: 15 | NumVar: 6 | NFilterRep: 10
+Sem filtro - F1 Score: 1.0
+Com filtro - F1 Score: 0.9743209876543211
+
+Seed: 2 | Dataset: 3 | K: 15 | NumVar: 7 | NFilterRep: 10
+Sem filtro - F1 Score: 1.0
+Com filtro - F1 Score: 0.9717813051146384
+
+Seed: 2 | Dataset: 3 | K: 15 | NumVar: 8 | NFilterRep: 10
+Sem filtro - F1 Score: 1.0
+Com filtro - F1 Score: 0.942857142857143
+
+Seed: 2 | Dataset: 3 | K: 15 | NumVar: 9 | NFilterRep: 10
+Sem filtro - F1 Score: 1.0
+Com filtro - F1 Score: 0.942857142857143
+
+Seed: 2 | Dataset: 3 | K: 15 | NumVar: 10 | NFilterRep: 10
+Sem filtro - F1 Score: 1.0
+Com filtro - F1 Score: 0.9453132832080202
+
+Seed: 2 | Dataset: 3 | K: 15 | NumVar: 11 | NFilterRep: 10
+Sem filtro - F1 Score: 1.0
+Com filtro - F1 Score: 0.8897435897435897
+
+Seed: 2 | Dataset: 3 | K: 15 | NumVar: 12 | NFilterRep: 10
+Sem filtro - F1 Score: 1.0
+Com filtro - F1 Score: 0.7174089068825911
+
+Seed: 2 | Dataset: 1 | K: 15 | NumVar: 1 | NFilterRep: 10
+Sem filtro - F1 Score: 1.0
+Com filtro - F1 Score: 1.0
+
+Seed: 2 | Dataset: 1 | K: 15 | NumVar: 2 | NFilterRep: 10
+Sem filtro - F1 Score: 1.0
+Com filtro - F1 Score: 0.9665831244778613
+
+Seed: 2 | Dataset: 1 | K: 15 | NumVar: 3 | NFilterRep: 10
+Sem filtro - F1 Score: 1.0
+Com filtro - F1 Score: 0.831328320802005
+
+Seed: 2 | Dataset: 2 | K: 15 | NumVar: 15 | NFilterRep: 10
+Sem filtro - F1 Score: 0.9777907364093366
+Com filtro - F1 Score: 0.972361543874724
+

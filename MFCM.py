@@ -1,6 +1,8 @@
 import numpy as np
+from numba import jit, cuda
 from timeit import default_timer as timer
 
+@jit(target_backend='cuda')
 def MFCM(data, centers, parM):
 
   start = timer()
@@ -133,7 +135,7 @@ def updateDistances(data, prototypes):
 
   return D
 
-
+@jit(target_backend='cuda')
 def updateMembership(distances, parM):
   
   nObj = distances.shape[1]
