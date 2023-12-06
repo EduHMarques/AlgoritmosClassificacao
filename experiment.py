@@ -1,11 +1,11 @@
 import numpy as np
 import random
+import time
 from MFCM import MFCM
 from filters import *
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn import preprocessing
 from sklearn.preprocessing import StandardScaler
-
 from sklearn.datasets import load_iris, load_digits, load_wine, load_breast_cancer
 from sklearn.metrics import classification_report, f1_score
 from sklearn.model_selection import StratifiedKFold, train_test_split
@@ -108,14 +108,18 @@ def select_dataset(indexData):
 
 def exec_knn(data_train, data_test, target_train, target_test, n_neighbors):
 
+    start = time.time()
+
     clf = KNeighborsClassifier(n_neighbors=n_neighbors)
     clf.fit(data_train, target_train)
 
     target_pred = clf.predict(data_test)
+
+    end = time.time()
     
     # print(classification_report(target_test, target_pred))
     # print(f'F1 Score: {f1_score(target_test, target_pred, average="macro")}')
-    return target_pred
+    return target_pred, (end - start)
 
 def kFold(r_data, r_target, seed):
 
@@ -127,7 +131,7 @@ def kFold(r_data, r_target, seed):
         x_train, x_test = r_data[train], r_data[test]
         y_train, y_test = r_target[train], r_target[test]
 
-        pred = exec_knn(x_train, x_test, y_train, y_test, n_neighbors)
+        pred, exec_time = exec_knn(x_train, x_test, y_train, y_test, n_neighbors)
         score = f1_score(y_test, pred, average='macro')
         if score > best_fold:
             r_data_train, r_data_test, r_target_train, r_target_test = x_train, x_test, y_train, y_test
@@ -148,14 +152,14 @@ if __name__ == "__main__":
 
     # Parâmetros
     seed = 2
-    indexData = 2
+    indexData = 4
     n_neighbors = 15
-    numVar = 15                      # Número de variáveis a serem cortadas
+    # numVar = 6                      # Número de variáveis a serem cortadas
     nFilterRep = 10 
 
-    metrics_info0 = (f'Seed: {seed} | Dataset: {indexData} | K: {n_neighbors} | NumVar: {numVar} | NFilterRep: {nFilterRep}')
-
     dataset = select_dataset(indexData)
+
+    numTotalVar = dataset[0].shape[1]
 
     # K fold dataset original
     r_data, r_target, nClasses, data_name = dataset
@@ -163,30 +167,42 @@ if __name__ == "__main__":
 
     # KNN sem filtro
     print(f'Executando KNN com dataset original: {data_name}')
-    pred = exec_knn(r_data_train, r_data_test, r_target_train, r_target_test, n_neighbors)
+    pred, exec_time = exec_knn(r_data_train, r_data_test, r_target_train, r_target_test, n_neighbors)
     score = f1_score(r_target_test, pred, average='macro')
     print(f'Sem filtro - F1 Score: {score}')
-    metrics_info1 = (f'Sem filtro - F1 Score: {score}')
+    metrics_info1 = (f'Sem filtro - F1 Score: {score} | Tempo: {exec_time}')
 
     # Execução do filtro
     dataset_to_filter = (r_data_train, r_data_test, r_target_train, r_target_test)
     result_mfcm = exec_mfcm_filter(dataset_to_filter, nFilterRep, nClasses)
-    filtered_dataset = run_filter(dataset_to_filter, result_mfcm, numVar, nClasses)
+
+    porcentagemVar = [10, 20, 30, 40, 50, 60, 70, 80, 90]
+
+    for i in porcentagemVar:
+        numVar = int(numTotalVar * (i/100))
+        print(f'Porcentagem de variáveis: {i}%')
+        print(f'Número de variáveis: {numVar}')
+        print(f'Executando filtro com {numVar} variáveis')
+        metrics_info0 = (f'Seed: {seed} | Dataset: {indexData} | K: {n_neighbors} | VarCortadas: {numVar} | NumReps Filtro: {nFilterRep}')
+
+        filtered_dataset = run_filter(dataset_to_filter, result_mfcm, numVar, nClasses)
     
-    # K fold dataset filtrado
-    f_data, f_target = filtered_dataset
-    f_data_train, f_data_test, f_target_train, f_target_test = kFold(f_data, f_target, seed)
+        # K fold dataset filtrado
+        f_data, f_target = filtered_dataset
+        f_data_train, f_data_test, f_target_train, f_target_test = kFold(f_data, f_target, seed)
 
-    # KNN com filtro
-    print(f'Executando KNN com dataset filtrado: {data_name}')
-    pred = exec_knn(f_data_train, f_data_test, f_target_train, f_target_test, n_neighbors)
-    score = f1_score(f_target_test, pred, average='macro')
-    print(f'Com filtro - F1 Score: {score}')
-    metrics_info2 = (f'Com filtro - F1 Score: {score}')
+        # KNN com filtro
+        print(f'Executando KNN com dataset filtrado: {data_name}')
+        pred, exec_time = exec_knn(f_data_train, f_data_test, f_target_train, f_target_test, n_neighbors)
+        score = f1_score(f_target_test, pred, average='macro')
+        print(f'Com filtro - F1 Score: {score}')
+        metrics_info2 = (f'Com filtro - F1 Score: {score} | Tempo: {exec_time}')
 
-    # Escrevendo no arquivo
+        # Escrevendo no arquivo
 
-    atualizaTxt('logs/resultados.txt', metrics_info0)
-    atualizaTxt('logs/resultados.txt', metrics_info1)
-    atualizaTxt('logs/resultados.txt', metrics_info2)
-    atualizaTxt('logs/resultados.txt', '')
+        atualizaTxt('logs/resultados.txt', metrics_info0)
+        atualizaTxt('logs/resultados.txt', metrics_info1)
+        atualizaTxt('logs/resultados.txt', metrics_info2)
+        atualizaTxt('logs/resultados.txt', '')
+
+    atualizaTxt('logs/resultados.txt', '##########################################################\n')
