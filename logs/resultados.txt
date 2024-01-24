@@ -1,76 +1,376 @@
-Seed: 2 | Dataset: 3 | K: 15 | VarCortadas: 1 | NumReps Filtro: 10
-Sem filtro - F1 Score: 1.0 | Tempo: 0.002076387405395508
-Com filtro - F1 Score: 1.0 | Tempo: 0.001001119613647461
+############################## Iris ##############################
 
-Seed: 2 | Dataset: 3 | K: 15 | VarCortadas: 2 | NumReps Filtro: 10
-Sem filtro - F1 Score: 1.0 | Tempo: 0.002076387405395508
-Com filtro - F1 Score: 1.0 | Tempo: 0.00203704833984375
+Seed: 42 | Dataset: 1 | K: 5 | VarCortadas: 0 | NumReps Filtro: 1
+Sem filtro - F1 Score: 1.0 | Tempo: 0.0009996891021728516
+Com filtro MFCM - F1 Score: 1.0 | Tempo: 0.0010001659393310547
+Com filtro mutual info - F1 Score: 1.0 | Tempo: 0.0010073184967041016
 
-Seed: 2 | Dataset: 3 | K: 15 | VarCortadas: 3 | NumReps Filtro: 10
-Sem filtro - F1 Score: 1.0 | Tempo: 0.002076387405395508
-Com filtro - F1 Score: 0.9743209876543211 | Tempo: 0.0015044212341308594
+Seed: 42 | Dataset: 1 | K: 5 | VarCortadas: 0 | NumReps Filtro: 1
+Sem filtro - F1 Score: 1.0 | Tempo: 0.0009996891021728516
+Com filtro MFCM - F1 Score: 1.0 | Tempo: 0.0010216236114501953
+Com filtro mutual info - F1 Score: 1.0 | Tempo: 0.0015544891357421875
 
-Seed: 2 | Dataset: 3 | K: 15 | VarCortadas: 5 | NumReps Filtro: 10
-Sem filtro - F1 Score: 1.0 | Tempo: 0.002076387405395508
-Com filtro - F1 Score: 1.0 | Tempo: 0.001027822494506836
+Seed: 42 | Dataset: 1 | K: 5 | VarCortadas: 1 | NumReps Filtro: 1
+Sem filtro - F1 Score: 1.0 | Tempo: 0.0009996891021728516
+Com filtro MFCM - F1 Score: 1.0 | Tempo: 0.0009996891021728516
+Com filtro mutual info - F1 Score: 1.0 | Tempo: 0.0010123252868652344
 
-Seed: 2 | Dataset: 3 | K: 15 | VarCortadas: 6 | NumReps Filtro: 10
-Sem filtro - F1 Score: 1.0 | Tempo: 0.002076387405395508
-Com filtro - F1 Score: 0.9743209876543211 | Tempo: 0.001512765884399414
+Seed: 42 | Dataset: 1 | K: 5 | VarCortadas: 1 | NumReps Filtro: 1
+Sem filtro - F1 Score: 1.0 | Tempo: 0.0009996891021728516
+Com filtro MFCM - F1 Score: 1.0 | Tempo: 0.002115488052368164
+Com filtro mutual info - F1 Score: 1.0 | Tempo: 0.001504659652709961
 
-Seed: 2 | Dataset: 3 | K: 15 | VarCortadas: 7 | NumReps Filtro: 10
-Sem filtro - F1 Score: 1.0 | Tempo: 0.002076387405395508
-Com filtro - F1 Score: 0.9743209876543211 | Tempo: 0.0023450851440429688
+Seed: 42 | Dataset: 1 | K: 5 | VarCortadas: 2 | NumReps Filtro: 1
+Sem filtro - F1 Score: 1.0 | Tempo: 0.0009996891021728516
+Com filtro MFCM - F1 Score: 1.0 | Tempo: 0.0010235309600830078
+Com filtro mutual info - F1 Score: 1.0 | Tempo: 0.0010154247283935547
 
-Seed: 2 | Dataset: 3 | K: 15 | VarCortadas: 9 | NumReps Filtro: 10
-Sem filtro - F1 Score: 1.0 | Tempo: 0.002076387405395508
-Com filtro - F1 Score: 0.9162962962962964 | Tempo: 0.0010118484497070312
+Seed: 42 | Dataset: 1 | K: 5 | VarCortadas: 2 | NumReps Filtro: 1
+Sem filtro - F1 Score: 1.0 | Tempo: 0.0009996891021728516
+Com filtro MFCM - F1 Score: 1.0 | Tempo: 0.0010066032409667969
+Com filtro mutual info - F1 Score: 1.0 | Tempo: 0.0020284652709960938
 
-Seed: 2 | Dataset: 3 | K: 15 | VarCortadas: 10 | NumReps Filtro: 10
-Sem filtro - F1 Score: 1.0 | Tempo: 0.002076387405395508
-Com filtro - F1 Score: 0.9451526251526251 | Tempo: 0.0010688304901123047
+Seed: 42 | Dataset: 1 | K: 5 | VarCortadas: 2 | NumReps Filtro: 1
+Sem filtro - F1 Score: 1.0 | Tempo: 0.0009996891021728516
+Com filtro MFCM - F1 Score: 1.0 | Tempo: 0.0010044574737548828
+Com filtro mutual info - F1 Score: 1.0 | Tempo: 0.0015032291412353516
 
-Seed: 2 | Dataset: 3 | K: 15 | VarCortadas: 11 | NumReps Filtro: 10
-Sem filtro - F1 Score: 1.0 | Tempo: 0.002076387405395508
-Com filtro - F1 Score: 0.8347578347578347 | Tempo: 0.0010113716125488281
+Seed: 42 | Dataset: 1 | K: 5 | VarCortadas: 3 | NumReps Filtro: 1
+Sem filtro - F1 Score: 1.0 | Tempo: 0.0009996891021728516
+Com filtro MFCM - F1 Score: 1.0 | Tempo: 0.0012140274047851562
+Com filtro mutual info - F1 Score: 1.0 | Tempo: 0.0010161399841308594
 
-##########################################################
+Seed: 42 | Dataset: 1 | K: 5 | VarCortadas: 3 | NumReps Filtro: 1
+Sem filtro - F1 Score: 1.0 | Tempo: 0.0009996891021728516
+Com filtro MFCM - F1 Score: 1.0 | Tempo: 0.0010001659393310547
+Com filtro mutual info - F1 Score: 1.0 | Tempo: 0.0010085105895996094
 
-Seed: 2 | Dataset: 4 | K: 15 | VarCortadas: 3 | NumReps Filtro: 10
-Sem filtro - F1 Score: 0.9811507936507937 | Tempo: 0.005654573440551758
-Com filtro - F1 Score: 0.9811507936507937 | Tempo: 0.006215810775756836
+############################## Digits ##############################
 
-Seed: 2 | Dataset: 4 | K: 15 | VarCortadas: 6 | NumReps Filtro: 10
-Sem filtro - F1 Score: 0.9811507936507937 | Tempo: 0.005654573440551758
-Com filtro - F1 Score: 0.9808604336043361 | Tempo: 0.0061075687408447266
+Seed: 42 | Dataset: 2 | K: 5 | VarCortadas: 6 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.9888852230582887 | Tempo: 0.01902461051940918
+Com filtro MFCM - F1 Score: 0.9805127660942826 | Tempo: 0.01588296890258789
+Com filtro mutual info - F1 Score: 0.9805127660942826 | Tempo: 0.017017841339111328
 
-Seed: 2 | Dataset: 4 | K: 15 | VarCortadas: 9 | NumReps Filtro: 10
-Sem filtro - F1 Score: 0.9811507936507937 | Tempo: 0.005654573440551758
-Com filtro - F1 Score: 0.971438200353863 | Tempo: 0.005316972732543945
+Seed: 42 | Dataset: 2 | K: 5 | VarCortadas: 12 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.9888852230582887 | Tempo: 0.01902461051940918
+Com filtro MFCM - F1 Score: 0.9803197476410072 | Tempo: 0.015444278717041016
+Com filtro mutual info - F1 Score: 0.9805127660942826 | Tempo: 0.016484737396240234
 
-Seed: 2 | Dataset: 4 | K: 15 | VarCortadas: 12 | NumReps Filtro: 10
-Sem filtro - F1 Score: 0.9811507936507937 | Tempo: 0.005654573440551758
-Com filtro - F1 Score: 0.9721203228173148 | Tempo: 0.006759166717529297
+Seed: 42 | Dataset: 2 | K: 5 | VarCortadas: 19 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.9888852230582887 | Tempo: 0.01902461051940918
+Com filtro MFCM - F1 Score: 0.9833264059241292 | Tempo: 0.016045570373535156
+Com filtro mutual info - F1 Score: 0.9833634292488238 | Tempo: 0.01653599739074707
 
-Seed: 2 | Dataset: 4 | K: 15 | VarCortadas: 15 | NumReps Filtro: 10
-Sem filtro - F1 Score: 0.9811507936507937 | Tempo: 0.005654573440551758
-Com filtro - F1 Score: 0.9061461794019934 | Tempo: 0.003017902374267578
+Seed: 42 | Dataset: 2 | K: 5 | VarCortadas: 25 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.9888852230582887 | Tempo: 0.01902461051940918
+Com filtro MFCM - F1 Score: 0.9888454752539259 | Tempo: 0.015023231506347656
+Com filtro mutual info - F1 Score: 0.9861442896478003 | Tempo: 0.016352176666259766
 
-Seed: 2 | Dataset: 4 | K: 15 | VarCortadas: 18 | NumReps Filtro: 10
-Sem filtro - F1 Score: 0.9811507936507937 | Tempo: 0.005654573440551758
-Com filtro - F1 Score: 0.9431589537223339 | Tempo: 0.004145622253417969
+Seed: 42 | Dataset: 2 | K: 5 | VarCortadas: 32 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.9888852230582887 | Tempo: 0.01902461051940918
+Com filtro MFCM - F1 Score: 0.994439571230753 | Tempo: 0.018952131271362305
+Com filtro mutual info - F1 Score: 0.9916503728251863 | Tempo: 0.0176239013671875
 
-Seed: 2 | Dataset: 4 | K: 15 | VarCortadas: 21 | NumReps Filtro: 10
-Sem filtro - F1 Score: 0.9811507936507937 | Tempo: 0.005654573440551758
-Com filtro - F1 Score: 0.9052649228705567 | Tempo: 0.0030531883239746094
+Seed: 42 | Dataset: 2 | K: 5 | VarCortadas: 38 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.9888852230582887 | Tempo: 0.01902461051940918
+Com filtro MFCM - F1 Score: 0.9887440743417775 | Tempo: 0.017360925674438477
+Com filtro mutual info - F1 Score: 0.9860955464771954 | Tempo: 0.019073963165283203
 
-Seed: 2 | Dataset: 4 | K: 15 | VarCortadas: 24 | NumReps Filtro: 10
-Sem filtro - F1 Score: 0.9811507936507937 | Tempo: 0.005654573440551758
-Com filtro - F1 Score: 0.8977745169968208 | Tempo: 0.002043008804321289
+Seed: 42 | Dataset: 2 | K: 5 | VarCortadas: 44 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.9888852230582887 | Tempo: 0.01902461051940918
+Com filtro MFCM - F1 Score: 0.9749878941242442 | Tempo: 0.019345998764038086
+Com filtro mutual info - F1 Score: 0.9668793291021898 | Tempo: 0.01537179946899414
 
-Seed: 2 | Dataset: 4 | K: 15 | VarCortadas: 27 | NumReps Filtro: 10
-Sem filtro - F1 Score: 0.9811507936507937 | Tempo: 0.005654573440551758
-Com filtro - F1 Score: 0.7385098972049954 | Tempo: 0.0030345916748046875
+Seed: 42 | Dataset: 2 | K: 5 | VarCortadas: 51 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.9888852230582887 | Tempo: 0.01902461051940918
+Com filtro MFCM - F1 Score: 0.9336344274232662 | Tempo: 0.01747727394104004
+Com filtro mutual info - F1 Score: 0.9527957595422384 | Tempo: 0.017637014389038086
 
-##########################################################
+Seed: 42 | Dataset: 2 | K: 5 | VarCortadas: 57 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.9888852230582887 | Tempo: 0.01902461051940918
+Com filtro MFCM - F1 Score: 0.730193607697055 | Tempo: 0.009224891662597656
+Com filtro mutual info - F1 Score: 0.7858980300243547 | Tempo: 0.008136749267578125
+
+############################## Wine ##############################
+
+Seed: 42 | Dataset: 3 | K: 5 | VarCortadas: 1 | NumReps Filtro: 1
+Sem filtro - F1 Score: 1.0 | Tempo: 0.0015037059783935547
+Com filtro MFCM - F1 Score: 0.9743209876543211 | Tempo: 0.0010569095611572266
+Com filtro mutual info - F1 Score: 0.9743209876543211 | Tempo: 0.001332998275756836
+
+Seed: 42 | Dataset: 3 | K: 5 | VarCortadas: 2 | NumReps Filtro: 1
+Sem filtro - F1 Score: 1.0 | Tempo: 0.0015037059783935547
+Com filtro MFCM - F1 Score: 1.0 | Tempo: 0.00150299072265625
+Com filtro mutual info - F1 Score: 1.0 | Tempo: 0.0015048980712890625
+
+Seed: 42 | Dataset: 3 | K: 5 | VarCortadas: 3 | NumReps Filtro: 1
+Sem filtro - F1 Score: 1.0 | Tempo: 0.0015037059783935547
+Com filtro MFCM - F1 Score: 0.9743209876543211 | Tempo: 0.0010259151458740234
+Com filtro mutual info - F1 Score: 1.0 | Tempo: 0.0010364055633544922
+
+Seed: 42 | Dataset: 3 | K: 5 | VarCortadas: 5 | NumReps Filtro: 1
+Sem filtro - F1 Score: 1.0 | Tempo: 0.0015037059783935547
+Com filtro MFCM - F1 Score: 1.0 | Tempo: 0.0010950565338134766
+Com filtro mutual info - F1 Score: 1.0 | Tempo: 0.002000093460083008
+
+Seed: 42 | Dataset: 3 | K: 5 | VarCortadas: 6 | NumReps Filtro: 1
+Sem filtro - F1 Score: 1.0 | Tempo: 0.0015037059783935547
+Com filtro MFCM - F1 Score: 0.9743209876543211 | Tempo: 0.0020782947540283203
+Com filtro mutual info - F1 Score: 1.0 | Tempo: 0.0020172595977783203
+
+Seed: 42 | Dataset: 3 | K: 5 | VarCortadas: 7 | NumReps Filtro: 1
+Sem filtro - F1 Score: 1.0 | Tempo: 0.0015037059783935547
+Com filtro MFCM - F1 Score: 1.0 | Tempo: 0.0010099411010742188
+Com filtro mutual info - F1 Score: 1.0 | Tempo: 0.0020411014556884766
+
+Seed: 42 | Dataset: 3 | K: 5 | VarCortadas: 9 | NumReps Filtro: 1
+Sem filtro - F1 Score: 1.0 | Tempo: 0.0015037059783935547
+Com filtro MFCM - F1 Score: 0.9743209876543211 | Tempo: 0.0010004043579101562
+Com filtro mutual info - F1 Score: 1.0 | Tempo: 0.0022230148315429688
+
+Seed: 42 | Dataset: 3 | K: 5 | VarCortadas: 10 | NumReps Filtro: 1
+Sem filtro - F1 Score: 1.0 | Tempo: 0.0015037059783935547
+Com filtro MFCM - F1 Score: 0.942857142857143 | Tempo: 0.00103759765625
+Com filtro mutual info - F1 Score: 1.0 | Tempo: 0.0010039806365966797
+
+Seed: 42 | Dataset: 3 | K: 5 | VarCortadas: 11 | NumReps Filtro: 1
+Sem filtro - F1 Score: 1.0 | Tempo: 0.0015037059783935547
+Com filtro MFCM - F1 Score: 0.884690358374569 | Tempo: 0.0014417171478271484
+Com filtro mutual info - F1 Score: 0.9740129935032483 | Tempo: 0.0010769367218017578
+
+############################## Breast Cancer ##############################
+
+Seed: 42 | Dataset: 4 | K: 5 | VarCortadas: 3 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.981329839502129 | Tempo: 0.006735563278198242
+Com filtro MFCM - F1 Score: 0.99062114356232 | Tempo: 0.006906270980834961
+Com filtro mutual info - F1 Score: 0.9811507936507937 | Tempo: 0.0061528682708740234
+
+Seed: 42 | Dataset: 4 | K: 5 | VarCortadas: 6 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.981329839502129 | Tempo: 0.006735563278198242
+Com filtro MFCM - F1 Score: 0.97186343068696 | Tempo: 0.005878448486328125
+Com filtro mutual info - F1 Score: 0.99062114356232 | Tempo: 0.0064847469329833984
+
+Seed: 42 | Dataset: 4 | K: 5 | VarCortadas: 9 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.981329839502129 | Tempo: 0.006735563278198242
+Com filtro MFCM - F1 Score: 0.97186343068696 | Tempo: 0.0072972774505615234
+Com filtro mutual info - F1 Score: 0.981329839502129 | Tempo: 0.005177497863769531
+
+Seed: 42 | Dataset: 4 | K: 5 | VarCortadas: 12 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.981329839502129 | Tempo: 0.006735563278198242
+Com filtro MFCM - F1 Score: 0.9531057178116 | Tempo: 0.005847930908203125
+Com filtro mutual info - F1 Score: 0.9808604336043361 | Tempo: 0.006696462631225586
+
+Seed: 42 | Dataset: 4 | K: 5 | VarCortadas: 15 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.981329839502129 | Tempo: 0.006735563278198242
+Com filtro MFCM - F1 Score: 0.8977745169968208 | Tempo: 0.004566192626953125
+Com filtro mutual info - F1 Score: 0.9526381387619443 | Tempo: 0.003011465072631836
+
+Seed: 42 | Dataset: 4 | K: 5 | VarCortadas: 18 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.981329839502129 | Tempo: 0.006735563278198242
+Com filtro MFCM - F1 Score: 0.9124257297855851 | Tempo: 0.004068613052368164
+Com filtro mutual info - F1 Score: 0.9619111259605746 | Tempo: 0.003070831298828125
+
+Seed: 42 | Dataset: 4 | K: 5 | VarCortadas: 21 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.981329839502129 | Tempo: 0.006735563278198242
+Com filtro MFCM - F1 Score: 0.8879790370127743 | Tempo: 0.002510547637939453
+Com filtro mutual info - F1 Score: 0.9619111259605747 | Tempo: 0.003032684326171875
+
+Seed: 42 | Dataset: 4 | K: 5 | VarCortadas: 24 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.981329839502129 | Tempo: 0.006735563278198242
+Com filtro MFCM - F1 Score: 0.8774301209845641 | Tempo: 0.003509521484375
+Com filtro mutual info - F1 Score: 0.9623015873015873 | Tempo: 0.002503633499145508
+
+Seed: 42 | Dataset: 4 | K: 5 | VarCortadas: 27 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.981329839502129 | Tempo: 0.006735563278198242
+Com filtro MFCM - F1 Score: 0.8149350649350648 | Tempo: 0.0025169849395751953
+Com filtro mutual info - F1 Score: 0.9354943011882629 | Tempo: 0.002253293991088867
+
+############################## Scene ##############################
+
+Seed: 42 | Dataset: 5 | K: 5 | VarCortadas: 29 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.8807252465137989 | Tempo: 0.025199413299560547
+Com filtro MFCM - F1 Score: 0.8828107085530841 | Tempo: 0.025418996810913086
+Com filtro mutual info - F1 Score: 0.8956887578070784 | Tempo: 0.024759531021118164
+
+Seed: 42 | Dataset: 5 | K: 5 | VarCortadas: 59 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.8807252465137989 | Tempo: 0.025199413299560547
+Com filtro MFCM - F1 Score: 0.8857605527366944 | Tempo: 0.025468826293945312
+Com filtro mutual info - F1 Score: 0.8906507530548451 | Tempo: 0.025542020797729492
+
+Seed: 42 | Dataset: 5 | K: 5 | VarCortadas: 88 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.8807252465137989 | Tempo: 0.025199413299560547
+Com filtro MFCM - F1 Score: 0.8936121635023581 | Tempo: 0.023113489151000977
+Com filtro mutual info - F1 Score: 0.9004758948893027 | Tempo: 0.023342609405517578
+
+Seed: 42 | Dataset: 5 | K: 5 | VarCortadas: 118 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.8807252465137989 | Tempo: 0.025199413299560547
+Com filtro MFCM - F1 Score: 0.8102564102564103 | Tempo: 0.02357625961303711
+Com filtro mutual info - F1 Score: 0.8956887578070784 | Tempo: 0.02339458465576172
+
+Seed: 42 | Dataset: 5 | K: 5 | VarCortadas: 147 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.8807252465137989 | Tempo: 0.025199413299560547
+Com filtro MFCM - F1 Score: 0.8009287513064949 | Tempo: 0.023932218551635742
+Com filtro mutual info - F1 Score: 0.9330461475343781 | Tempo: 0.022702932357788086
+
+Seed: 42 | Dataset: 5 | K: 5 | VarCortadas: 177 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.8807252465137989 | Tempo: 0.025199413299560547
+Com filtro MFCM - F1 Score: 0.8152299175234436 | Tempo: 0.021988630294799805
+Com filtro mutual info - F1 Score: 0.9389853526045203 | Tempo: 0.022893428802490234
+
+Seed: 42 | Dataset: 5 | K: 5 | VarCortadas: 206 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.8807252465137989 | Tempo: 0.025199413299560547
+Com filtro MFCM - F1 Score: 0.7667248642057422 | Tempo: 0.026348114013671875
+Com filtro mutual info - F1 Score: 0.9342565273261114 | Tempo: 0.02544999122619629
+
+Seed: 42 | Dataset: 5 | K: 5 | VarCortadas: 236 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.8807252465137989 | Tempo: 0.025199413299560547
+Com filtro MFCM - F1 Score: 0.742883117078265 | Tempo: 0.02063274383544922
+Com filtro mutual info - F1 Score: 0.9751073849816281 | Tempo: 0.020724058151245117
+
+Seed: 42 | Dataset: 5 | K: 5 | VarCortadas: 265 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.8807252465137989 | Tempo: 0.025199413299560547
+Com filtro MFCM - F1 Score: 0.6487811340752518 | Tempo: 0.018896102905273438
+Com filtro mutual info - F1 Score: 1.0 | Tempo: 0.01844954490661621
+
+############################## Madelon ##############################
+
+Seed: 42 | Dataset: 6 | K: 5 | VarCortadas: 50 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.6479166666666667 | Tempo: 0.03337216377258301
+Com filtro MFCM - F1 Score: 0.6594475297074868 | Tempo: 0.02990269660949707
+Com filtro mutual info - F1 Score: 0.7074802741632249 | Tempo: 0.03215193748474121
+
+Seed: 42 | Dataset: 6 | K: 5 | VarCortadas: 100 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.6479166666666667 | Tempo: 0.03337216377258301
+Com filtro MFCM - F1 Score: 0.7082938608711805 | Tempo: 0.03040480613708496
+Com filtro mutual info - F1 Score: 0.6787879460405177 | Tempo: 0.030524015426635742
+
+Seed: 42 | Dataset: 6 | K: 5 | VarCortadas: 150 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.6479166666666667 | Tempo: 0.03337216377258301
+Com filtro MFCM - F1 Score: 0.7191642992424243 | Tempo: 0.030180931091308594
+Com filtro mutual info - F1 Score: 0.7171308991196421 | Tempo: 0.028313636779785156
+
+Seed: 42 | Dataset: 6 | K: 5 | VarCortadas: 200 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.6479166666666667 | Tempo: 0.03337216377258301
+Com filtro MFCM - F1 Score: 0.6971349500480413 | Tempo: 0.026784181594848633
+Com filtro mutual info - F1 Score: 0.709227185702806 | Tempo: 0.02926325798034668
+
+Seed: 42 | Dataset: 6 | K: 5 | VarCortadas: 250 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.6479166666666667 | Tempo: 0.03337216377258301
+Com filtro MFCM - F1 Score: 0.7017896321948801 | Tempo: 0.02937936782836914
+Com filtro mutual info - F1 Score: 0.7186556666256217 | Tempo: 0.03221940994262695
+
+Seed: 42 | Dataset: 6 | K: 5 | VarCortadas: 300 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.6479166666666667 | Tempo: 0.03337216377258301
+Com filtro MFCM - F1 Score: 0.7247709817710742 | Tempo: 0.027436494827270508
+Com filtro mutual info - F1 Score: 0.7420634920634921 | Tempo: 0.025444984436035156
+
+Seed: 42 | Dataset: 6 | K: 5 | VarCortadas: 350 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.6479166666666667 | Tempo: 0.03337216377258301
+Com filtro MFCM - F1 Score: 0.7843569958085872 | Tempo: 0.026266098022460938
+Com filtro mutual info - F1 Score: 0.7882610755745084 | Tempo: 0.026520729064941406
+
+Seed: 42 | Dataset: 6 | K: 5 | VarCortadas: 400 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.6479166666666667 | Tempo: 0.03337216377258301
+Com filtro MFCM - F1 Score: 0.8113598673300166 | Tempo: 0.026098012924194336
+Com filtro mutual info - F1 Score: 0.7768648390479069 | Tempo: 0.024712800979614258
+
+Seed: 42 | Dataset: 6 | K: 5 | VarCortadas: 450 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.6479166666666667 | Tempo: 0.03337216377258301
+Com filtro MFCM - F1 Score: 0.9038105808361081 | Tempo: 0.025257349014282227
+Com filtro mutual info - F1 Score: 0.901919812419792 | Tempo: 0.024692773818969727
+
+############################## Hiva Agnostic ##############################
+
+Seed: 42 | Dataset: 7 | K: 5 | VarCortadas: 161 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.6546092920715277 | Tempo: 0.08994698524475098
+Com filtro MFCM - F1 Score: 0.6456791846991483 | Tempo: 0.08536243438720703
+Com filtro mutual info - F1 Score: 0.6539974896695673 | Tempo: 0.09061074256896973
+
+Seed: 42 | Dataset: 7 | K: 5 | VarCortadas: 323 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.6546092920715277 | Tempo: 0.08994698524475098
+Com filtro MFCM - F1 Score: 0.6456791846991483 | Tempo: 0.08309817314147949
+Com filtro mutual info - F1 Score: 0.6581818181818182 | Tempo: 0.08148455619812012
+
+Seed: 42 | Dataset: 7 | K: 5 | VarCortadas: 485 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.6546092920715277 | Tempo: 0.08994698524475098
+Com filtro MFCM - F1 Score: 0.6581818181818182 | Tempo: 0.0748593807220459
+Com filtro mutual info - F1 Score: 0.6581818181818182 | Tempo: 0.07903313636779785
+
+Seed: 42 | Dataset: 7 | K: 5 | VarCortadas: 647 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.6546092920715277 | Tempo: 0.08994698524475098
+Com filtro MFCM - F1 Score: 0.6581818181818182 | Tempo: 0.06566739082336426
+Com filtro mutual info - F1 Score: 0.6539974896695673 | Tempo: 0.06303620338439941
+
+Seed: 42 | Dataset: 7 | K: 5 | VarCortadas: 809 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.6546092920715277 | Tempo: 0.08994698524475098
+Com filtro MFCM - F1 Score: 0.6456791846991483 | Tempo: 0.05760359764099121
+Com filtro mutual info - F1 Score: 0.6499889673433362 | Tempo: 0.05963754653930664
+
+Seed: 42 | Dataset: 7 | K: 5 | VarCortadas: 970 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.6546092920715277 | Tempo: 0.08994698524475098
+Com filtro MFCM - F1 Score: 0.6625548448095021 | Tempo: 0.05304241180419922
+Com filtro mutual info - F1 Score: 0.6539974896695673 | Tempo: 0.05154752731323242
+
+Seed: 42 | Dataset: 7 | K: 5 | VarCortadas: 1132 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.6546092920715277 | Tempo: 0.08994698524475098
+Com filtro MFCM - F1 Score: 0.6671307506053269 | Tempo: 0.0435643196105957
+Com filtro mutual info - F1 Score: 0.6581818181818182 | Tempo: 0.04510903358459473
+
+Seed: 42 | Dataset: 7 | K: 5 | VarCortadas: 1294 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.6546092920715277 | Tempo: 0.08994698524475098
+Com filtro MFCM - F1 Score: 0.6778597317613211 | Tempo: 0.0380704402923584
+Com filtro mutual info - F1 Score: 0.6927272727272729 | Tempo: 0.03659987449645996
+
+Seed: 42 | Dataset: 7 | K: 5 | VarCortadas: 1456 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.6546092920715277 | Tempo: 0.08994698524475098
+Com filtro MFCM - F1 Score: 0.6875507822310204 | Tempo: 0.032514333724975586
+Com filtro mutual info - F1 Score: 0.719991173874669 | Tempo: 0.03254079818725586
+
+############################## Musk Version 1 ##############################
+
+Seed: 42 | Dataset: 8 | K: 5 | VarCortadas: 16 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.9359838274932615 | Tempo: 0.0067217350006103516
+Com filtro MFCM - F1 Score: 0.926693574779099 | Tempo: 0.005576372146606445
+Com filtro mutual info - F1 Score: 0.9254901960784314 | Tempo: 0.005519390106201172
+
+Seed: 42 | Dataset: 8 | K: 5 | VarCortadas: 33 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.9359838274932615 | Tempo: 0.0067217350006103516
+Com filtro MFCM - F1 Score: 0.9260206919568361 | Tempo: 0.005566120147705078
+Com filtro mutual info - F1 Score: 0.9359838274932615 | Tempo: 0.006522178649902344
+
+Seed: 42 | Dataset: 8 | K: 5 | VarCortadas: 50 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.9359838274932615 | Tempo: 0.0067217350006103516
+Com filtro MFCM - F1 Score: 0.9454085737271578 | Tempo: 0.005853414535522461
+Com filtro mutual info - F1 Score: 0.9257895324182569 | Tempo: 0.006440877914428711
+
+Seed: 42 | Dataset: 8 | K: 5 | VarCortadas: 66 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.9359838274932615 | Tempo: 0.0067217350006103516
+Com filtro MFCM - F1 Score: 0.9458319078572244 | Tempo: 0.006711006164550781
+Com filtro mutual info - F1 Score: 0.9257895324182569 | Tempo: 0.005561113357543945
+
+Seed: 42 | Dataset: 8 | K: 5 | VarCortadas: 83 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.9359838274932615 | Tempo: 0.0067217350006103516
+Com filtro MFCM - F1 Score: 0.9458319078572244 | Tempo: 0.004639148712158203
+Com filtro mutual info - F1 Score: 0.9153297682709448 | Tempo: 0.0065457820892333984
+
+Seed: 42 | Dataset: 8 | K: 5 | VarCortadas: 100 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.9359838274932615 | Tempo: 0.0067217350006103516
+Com filtro MFCM - F1 Score: 0.9674991447143346 | Tempo: 0.005633354187011719
+Com filtro mutual info - F1 Score: 0.9347527472527473 | Tempo: 0.006637096405029297
+
+Seed: 42 | Dataset: 8 | K: 5 | VarCortadas: 116 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.9359838274932615 | Tempo: 0.0067217350006103516
+Com filtro MFCM - F1 Score: 0.916083916083916 | Tempo: 0.0063495635986328125
+Com filtro mutual info - F1 Score: 0.9573225516621744 | Tempo: 0.006620168685913086
+
+Seed: 42 | Dataset: 8 | K: 5 | VarCortadas: 133 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.9359838274932615 | Tempo: 0.0067217350006103516
+Com filtro MFCM - F1 Score: 0.9573225516621743 | Tempo: 0.005470752716064453
+Com filtro mutual info - F1 Score: 0.9893030064181962 | Tempo: 0.005075931549072266
+
+Seed: 42 | Dataset: 8 | K: 5 | VarCortadas: 150 | NumReps Filtro: 1
+Sem filtro - F1 Score: 0.9359838274932615 | Tempo: 0.0067217350006103516
+Com filtro MFCM - F1 Score: 0.7577873849905775 | Tempo: 0.00655364990234375
+Com filtro mutual info - F1 Score: 1.0 | Tempo: 0.005541563034057617
 

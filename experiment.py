@@ -10,6 +10,15 @@ from sklearn.datasets import load_iris, load_digits, load_wine, load_breast_canc
 from sklearn.metrics import classification_report, f1_score
 from sklearn.model_selection import StratifiedKFold, train_test_split
 from sklearn.model_selection import cross_val_score
+from datasets import selectDataset
+
+from sklearn.feature_selection import mutual_info_classif, chi2
+
+from numba.core.errors import NumbaDeprecationWarning, NumbaPendingDeprecationWarning
+import warnings
+
+warnings.simplefilter('ignore', category=NumbaDeprecationWarning)
+warnings.simplefilter('ignore', category=NumbaPendingDeprecationWarning)
 
 scaler = StandardScaler()
 
@@ -68,43 +77,14 @@ def exec_mfcm_filter(dataset, nRep, nClusters):
 def run_filter(dataset, result, numVar, numClasses):
 	
     data = np.vstack((dataset[0], dataset[1]))
+    target = np.hstack((dataset[2], dataset[3]))
 
     resultado_filtro = variance_filter(data, result['bestM'], numClasses)
     resultado_filtro[0].sort(key=lambda k : k[0])
 
-	## Aplicando filtro
     data = apply_filter(data, resultado_filtro, numVar)
-    target = np.hstack((dataset[2], dataset[3]))
 
     return (data, target)
-
-def select_dataset(indexData):
-    if indexData == 1:
-        nClasses = 3
-        dataset_name = 'Iris'
-        data, target = load_iris(return_X_y=True)
-        data = scaler.fit_transform(data)
-        return (data, target, nClasses, dataset_name)
-    if indexData == 2:
-        nClasses = 10
-        dataset_name = 'Digits'
-        data, target = load_digits(return_X_y=True)
-        data = scaler.fit_transform(data)
-        return (data, target, nClasses, dataset_name)
-    if indexData == 3:
-        nClasses = 3
-        dataset_name = 'Wine'
-        data, target = load_wine(return_X_y=True)
-        data = scaler.fit_transform(data)
-        # data = preprocessing.normalize(data)
-        return (data, target, nClasses, dataset_name)
-    if indexData == 4:
-        nClasses = 2
-        dataset_name = 'Breast Cancer'
-        data, target = load_breast_cancer(return_X_y=True)
-        data = scaler.fit_transform(data)
-        # data = preprocessing.normalize(data)
-        return (data, target, nClasses, dataset_name)
 
 def exec_knn(data_train, data_test, target_train, target_test, n_neighbors):
 
@@ -121,7 +101,7 @@ def exec_knn(data_train, data_test, target_train, target_test, n_neighbors):
     # print(f'F1 Score: {f1_score(target_test, target_pred, average="macro")}')
     return target_pred, (end - start)
 
-def kFold(r_data, r_target, seed):
+def kFold(r_data, r_target, seed, n_neighbors):
 
     sk = StratifiedKFold(n_splits=5, shuffle=True, random_state=seed)
     best_fold = 0
@@ -148,22 +128,35 @@ def atualizaTxt(nome, lista):
 	arquivo.write('\n')
 	arquivo.close()
 
-if __name__ == "__main__":
+def filtro_mutual_info(dataset, numVar):
+    print('MUTUAL INFO TESTE')
+    X = np.vstack((dataset[0], dataset[1]))
+    y = np.hstack((dataset[2], dataset[3]))
 
-    # Parâmetros
-    seed = 2
-    indexData = 4
-    n_neighbors = 15
-    # numVar = 6                      # Número de variáveis a serem cortadas
-    nFilterRep = 10 
+    resultado_filtro = mutual_info_classif(X, y)
 
-    dataset = select_dataset(indexData)
+    resultado_filtro = [(pontuacao, indice) for indice, pontuacao in enumerate(resultado_filtro)]
+    resultado_filtro.sort(key=lambda x: x[0])
+
+    resultado_filtro = (resultado_filtro, 'Filtro por Mutual Info')
+
+    X = apply_filter(X, resultado_filtro, numVar)
+
+    return (X, y)
+
+def experimento(indexData, n_neighbors, nFilterRep):
+
+    seed = 42
+
+    dataset = selectDataset(indexData)
+    
+    print(dataset)
 
     numTotalVar = dataset[0].shape[1]
 
     # K fold dataset original
     r_data, r_target, nClasses, data_name = dataset
-    r_data_train, r_data_test, r_target_train, r_target_test = kFold(r_data, r_target, seed)
+    r_data_train, r_data_test, r_target_train, r_target_test = kFold(r_data, r_target, seed, n_neighbors)
 
     # KNN sem filtro
     print(f'Executando KNN com dataset original: {data_name}')
@@ -177,6 +170,7 @@ if __name__ == "__main__":
     result_mfcm = exec_mfcm_filter(dataset_to_filter, nFilterRep, nClasses)
 
     porcentagemVar = [10, 20, 30, 40, 50, 60, 70, 80, 90]
+    # porcentagemVar = [25, 50]
 
     for i in porcentagemVar:
         numVar = int(numTotalVar * (i/100))
@@ -185,24 +179,54 @@ if __name__ == "__main__":
         print(f'Executando filtro com {numVar} variáveis')
         metrics_info0 = (f'Seed: {seed} | Dataset: {indexData} | K: {n_neighbors} | VarCortadas: {numVar} | NumReps Filtro: {nFilterRep}')
 
+        # Dataset filtrado com MFCM
         filtered_dataset = run_filter(dataset_to_filter, result_mfcm, numVar, nClasses)
     
-        # K fold dataset filtrado
+        # K fold dataset filtrado MFCM
         f_data, f_target = filtered_dataset
-        f_data_train, f_data_test, f_target_train, f_target_test = kFold(f_data, f_target, seed)
+        f_data_train, f_data_test, f_target_train, f_target_test = kFold(f_data, f_target, seed, n_neighbors)
 
-        # KNN com filtro
-        print(f'Executando KNN com dataset filtrado: {data_name}')
+        # KNN com filtro MFCM
+        print(f'Executando KNN com dataset filtrado MFCM: {data_name}')
         pred, exec_time = exec_knn(f_data_train, f_data_test, f_target_train, f_target_test, n_neighbors)
         score = f1_score(f_target_test, pred, average='macro')
-        print(f'Com filtro - F1 Score: {score}')
-        metrics_info2 = (f'Com filtro - F1 Score: {score} | Tempo: {exec_time}')
+        print(f'Com filtro MFCM - F1 Score: {score}')
+        metrics_info2 = (f'Com filtro MFCM - F1 Score: {score} | Tempo: {exec_time}')
+
+        # Dataset filtrado mutual info
+        filtered_dataset = filtro_mutual_info(dataset_to_filter, numVar)
+        
+        # K fold dataset filtrado MFCM
+        f_data, f_target = filtered_dataset
+        f_data_train, f_data_test, f_target_train, f_target_test = kFold(f_data, f_target, seed, n_neighbors)
+
+        # KNN com filtro mutual info
+        print(f'Executando KNN com dataset filtrado mutual info: {data_name}')
+        pred, exec_time = exec_knn(f_data_train, f_data_test, f_target_train, f_target_test, n_neighbors)
+        score = f1_score(f_target_test, pred, average='macro')
+        print(f'Com filtro mutual info - F1 Score: {score}')
+        metrics_info3 = (f'Com filtro mutual info - F1 Score: {score} | Tempo: {exec_time}')
 
         # Escrevendo no arquivo
-
         atualizaTxt('logs/resultados.txt', metrics_info0)
         atualizaTxt('logs/resultados.txt', metrics_info1)
         atualizaTxt('logs/resultados.txt', metrics_info2)
+        atualizaTxt('logs/resultados.txt', metrics_info3)
         atualizaTxt('logs/resultados.txt', '')
 
-    atualizaTxt('logs/resultados.txt', '##########################################################\n')
+if __name__ == "__main__":
+
+    num_datasets = 8
+    n_neighbors = 5
+    nRepMFCM = 1
+
+    for id_dataset in range(1, num_datasets + 1):
+
+        print(id_dataset)
+
+        dataset_name = selectDataset(id_dataset)[-1]
+        info_data = (f'############################## {dataset_name} ##############################\n')
+
+        atualizaTxt('logs/resultados.txt', info_data)
+
+        experimento(id_dataset, n_neighbors, nRepMFCM)
