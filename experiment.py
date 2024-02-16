@@ -20,6 +20,8 @@ import warnings
 warnings.simplefilter('ignore', category=NumbaDeprecationWarning)
 warnings.simplefilter('ignore', category=NumbaPendingDeprecationWarning)
 
+random.seed(42)
+
 scaler = StandardScaler()
 
 def execute(nRep, dataset, centersAll):
@@ -29,7 +31,7 @@ def execute(nRep, dataset, centersAll):
     best_centers = 0
 
     for r in range(nRep):
-        print(f'MFCM rep: {r}')
+        # print(f'MFCM rep: {r}')
         centers = list(map(int, centersAll[r,].tolist()))
 
         resp = MFCM(dataset, centers, 2)
@@ -49,14 +51,11 @@ def execute(nRep, dataset, centersAll):
 
     return dict
 
-def exec_mfcm_filter(dataset, nRep, nClusters):
+def exec_mfcm_filter(data, nRep, nClusters):
     ## Inicializando variáveis
     result = {}
     Jmin = 2147483647
     centers = 0
-
-    data = np.vstack((dataset[0], dataset[1]))
-    ref = np.hstack((dataset[2], dataset[3]))
 
     nObj = len(data)
 
@@ -86,6 +85,15 @@ def run_filter(dataset, result, numVar, numClasses):
 
     return (data, target)
 
+def filter(data, result, numVar, numClasses):
+
+    resultado_filtro = variance_filter(data, result['bestM'], numClasses)
+    resultado_filtro[0].sort(key=lambda k : k[0])
+
+    data = apply_filter(data, resultado_filtro, numVar)
+
+    return data
+
 def exec_knn(data_train, data_test, target_train, target_test, n_neighbors):
 
     start = time.time()
@@ -96,31 +104,12 @@ def exec_knn(data_train, data_test, target_train, target_test, n_neighbors):
     target_pred = clf.predict(data_test)
 
     end = time.time()
+
+    score = f1_score(target_test, target_pred, average="macro")
     
     # print(classification_report(target_test, target_pred))
-    # print(f'F1 Score: {f1_score(target_test, target_pred, average="macro")}')
-    return target_pred, (end - start)
-
-def kFold(r_data, r_target, seed, n_neighbors):
-
-    sk = StratifiedKFold(n_splits=5, shuffle=True, random_state=seed)
-    best_fold = 0
-    r_data_train, r_data_test, r_target_train, r_target_test = 0, 0, 0, 0
-
-    for train, test in sk.split(r_data, r_target):
-        x_train, x_test = r_data[train], r_data[test]
-        y_train, y_test = r_target[train], r_target[test]
-
-        pred, exec_time = exec_knn(x_train, x_test, y_train, y_test, n_neighbors)
-        score = f1_score(y_test, pred, average='macro')
-        if score > best_fold:
-            r_data_train, r_data_test, r_target_train, r_target_test = x_train, x_test, y_train, y_test
-            best_fold = score
-
-    print(f'train set size: {len(r_data_train)}')
-    print(f'test set size: {len(r_data_test)}')
-
-    return (r_data_train, r_data_test, r_target_train, r_target_test)
+    print(f'F1 Score: {score}')
+    return score, (end - start)
 
 def atualizaTxt(nome, lista):
 	arquivo = open(nome, 'a')
@@ -128,10 +117,7 @@ def atualizaTxt(nome, lista):
 	arquivo.write('\n')
 	arquivo.close()
 
-def filtro_mutual_info(dataset, numVar):
-    print('MUTUAL INFO TESTE')
-    X = np.vstack((dataset[0], dataset[1]))
-    y = np.hstack((dataset[2], dataset[3]))
+def filtro_mutual_info(X, y, numVar):
 
     resultado_filtro = mutual_info_classif(X, y)
 
@@ -142,91 +128,104 @@ def filtro_mutual_info(dataset, numVar):
 
     X = apply_filter(X, resultado_filtro, numVar)
 
-    return (X, y)
+    return X
+
+def media_listas(lista):
+    medias = []
+
+    for i in range(len(lista[0])):
+        soma_scores = 0
+        soma_tempos = 0
+        for lista_interna in lista:
+            score, tempo = lista_interna[i]
+            soma_scores += score
+            soma_tempos += tempo
+        media_score = soma_scores / len(lista)
+        media_tempo = soma_tempos / len(lista)
+        medias.append((media_score, media_tempo))
+
+    return medias
+
+def cross_validation(data, target, seed, n_neighbors, n_folds, nFilterRep, nClasses, porcentagemVar, filter_name):
+
+    kfold = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=seed)
+
+    resultados = []
+
+    for train, test in kfold.split(data, target):
+
+        print('Split')
+
+        if filter_name == 'MFCM':
+            mfcm = exec_mfcm_filter(data[train], nFilterRep, nClasses)
+
+        scores_porcentagem = []
+
+        for i in porcentagemVar:
+            numVar = int(data.shape[1] * (i/100))
+            # print(f'Porcentagem de variáveis cortadas: {i}%')
+            # print(f'Número de variáveis apos filtro: {data.shape[1] - numVar}')
+
+            if filter_name == 'MFCM':
+                filtered_train = filter(data[train], mfcm, numVar, nClasses)
+                filtered_test = filter(data[test], mfcm, numVar, nClasses)
+            elif filter_name == 'MUTUAL':
+                filtered_train = filtro_mutual_info(data[train], target[train], numVar)
+                filtered_test = filtro_mutual_info(data[test], target[test], numVar)
+
+            score, time = exec_knn(filtered_train, filtered_test, target[train], target[test], n_neighbors)
+
+            scores_porcentagem.append((score, time))
+
+        resultados.append(scores_porcentagem)
+
+    resultados = media_listas(resultados)
+
+    print(resultados)
+
+    return resultados
 
 def experimento(indexData, n_neighbors, nFilterRep):
 
     seed = 42
 
     dataset = selectDataset(indexData)
-    
-    print(dataset)
 
-    numTotalVar = dataset[0].shape[1]
+    porcentagemVar = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90]
+    # porcentagemVar = [0, 25, 50, 75]
 
     # K fold dataset original
-    r_data, r_target, nClasses, data_name = dataset
-    r_data_train, r_data_test, r_target_train, r_target_test = kFold(r_data, r_target, seed, n_neighbors)
+    data, target, nClasses, data_name = dataset
 
-    # KNN sem filtro
-    print(f'Executando KNN com dataset original: {data_name}')
-    pred, exec_time = exec_knn(r_data_train, r_data_test, r_target_train, r_target_test, n_neighbors)
-    score = f1_score(r_target_test, pred, average='macro')
-    print(f'Sem filtro - F1 Score: {score}')
-    metrics_info1 = (f'Sem filtro - F1 Score: {score} | Tempo: {exec_time}')
+    info_data = (f'############################## {data_name} ##############################\n')
+    atualizaTxt('logs/resultados.txt', info_data)
 
-    # Execução do filtro
-    dataset_to_filter = (r_data_train, r_data_test, r_target_train, r_target_test)
-    result_mfcm = exec_mfcm_filter(dataset_to_filter, nFilterRep, nClasses)
+    # Executando filtros e classificadores: 
+    result_mfcm = cross_validation(data, target, seed, n_neighbors, 5, nFilterRep, nClasses, porcentagemVar, 'MFCM')
+    result_mutual = cross_validation(data, target, seed, n_neighbors, 5, nFilterRep, nClasses, porcentagemVar, 'MUTUAL')
 
-    porcentagemVar = [10, 20, 30, 40, 50, 60, 70, 80, 90]
-    # porcentagemVar = [25, 50]
+    # Armazenando resultados:
+    basics_info = (f'Seed: {seed} | Dataset: {data_name} | K: {n_neighbors} | MFCM Reps: {nFilterRep}\n')
+    atualizaTxt('logs/resultados.txt', basics_info)
 
-    for i in porcentagemVar:
-        numVar = int(numTotalVar * (i/100))
-        print(f'Porcentagem de variáveis: {i}%')
-        print(f'Número de variáveis: {numVar}')
-        print(f'Executando filtro com {numVar} variáveis')
-        metrics_info0 = (f'Seed: {seed} | Dataset: {indexData} | K: {n_neighbors} | VarCortadas: {numVar} | NumReps Filtro: {nFilterRep}')
+    for _, i in enumerate(result_mfcm):
+        var_info = (f'Porcentagem de variaveis cortadas: {porcentagemVar[_]}%')
+        metrics_mfcm = (f'Com filtro MFCM - F1 Score: {i[0]} | Tempo: {i[1]}')
+        metrics_mutual = (f'Com filtro Mutual - F1 Score: {result_mutual[_][0]} | Tempo: {result_mutual[_][1]}')
 
-        # Dataset filtrado com MFCM
-        filtered_dataset = run_filter(dataset_to_filter, result_mfcm, numVar, nClasses)
-    
-        # K fold dataset filtrado MFCM
-        f_data, f_target = filtered_dataset
-        f_data_train, f_data_test, f_target_train, f_target_test = kFold(f_data, f_target, seed, n_neighbors)
-
-        # KNN com filtro MFCM
-        print(f'Executando KNN com dataset filtrado MFCM: {data_name}')
-        pred, exec_time = exec_knn(f_data_train, f_data_test, f_target_train, f_target_test, n_neighbors)
-        score = f1_score(f_target_test, pred, average='macro')
-        print(f'Com filtro MFCM - F1 Score: {score}')
-        metrics_info2 = (f'Com filtro MFCM - F1 Score: {score} | Tempo: {exec_time}')
-
-        # Dataset filtrado mutual info
-        filtered_dataset = filtro_mutual_info(dataset_to_filter, numVar)
-        
-        # K fold dataset filtrado MFCM
-        f_data, f_target = filtered_dataset
-        f_data_train, f_data_test, f_target_train, f_target_test = kFold(f_data, f_target, seed, n_neighbors)
-
-        # KNN com filtro mutual info
-        print(f'Executando KNN com dataset filtrado mutual info: {data_name}')
-        pred, exec_time = exec_knn(f_data_train, f_data_test, f_target_train, f_target_test, n_neighbors)
-        score = f1_score(f_target_test, pred, average='macro')
-        print(f'Com filtro mutual info - F1 Score: {score}')
-        metrics_info3 = (f'Com filtro mutual info - F1 Score: {score} | Tempo: {exec_time}')
-
-        # Escrevendo no arquivo
-        atualizaTxt('logs/resultados.txt', metrics_info0)
-        atualizaTxt('logs/resultados.txt', metrics_info1)
-        atualizaTxt('logs/resultados.txt', metrics_info2)
-        atualizaTxt('logs/resultados.txt', metrics_info3)
+        atualizaTxt('logs/resultados.txt', var_info)
+        atualizaTxt('logs/resultados.txt', metrics_mfcm)
+        atualizaTxt('logs/resultados.txt', metrics_mutual)
         atualizaTxt('logs/resultados.txt', '')
 
 if __name__ == "__main__":
 
-    num_datasets = 8
+    datasets = [1]
     n_neighbors = 5
-    nRepMFCM = 1
+    nRepMFCM = 10
 
-    for id_dataset in range(1, num_datasets + 1):
+    # experimento(3, n_neighbors, nRepMFCM)
 
-        print(id_dataset)
-
-        dataset_name = selectDataset(id_dataset)[-1]
-        info_data = (f'############################## {dataset_name} ##############################\n')
-
-        atualizaTxt('logs/resultados.txt', info_data)
-
-        experimento(id_dataset, n_neighbors, nRepMFCM)
+    for _, id in enumerate(datasets):
+        
+        experimento(id, n_neighbors, nRepMFCM)
