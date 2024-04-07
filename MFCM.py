@@ -61,10 +61,9 @@ def initializePrototypes(data,centers):
   P = np.arange(nProt * nVar)
   P = P.reshape((nProt, nVar))
   
-  P = (np.zeros_like(P)).astype('float64')
+  P = np.zeros((nProt, nVar), dtype=np.float64)
   
-  for k in range(0, nProt):
-    P[k,] = data[centers[k],]
+  P[:] = data[centers]
   
   return P
 
@@ -101,14 +100,10 @@ def updatePrototypes(data, memberships, parM):
 
 def updateDistances(data, prototypes):
   
-  nObj = data.shape[0]
+  nObj, nVar = data.shape
   nProt = prototypes.shape[0]
-  nVar = data.shape[1]
-  
-  D = np.arange(nVar * nObj * nProt)
-  D = D.reshape((nVar, nObj, nProt))
-  
-  D = (np.zeros_like(D)).astype('float64')
+
+  D = np.zeros((nVar, nObj, nProt), dtype=np.float64)
   
   Dvar = np.arange(nObj * nProt)
   Dvar = Dvar.reshape((nObj, nProt))
@@ -137,22 +132,14 @@ def updateDistances(data, prototypes):
 
 @jit(target_backend='cuda')
 def updateMembership(distances, parM):
-  
-  nObj = distances.shape[1]
-  nProt = distances[0].shape[1]
-  nVar = len(distances)
-  
-  U = np.arange(nVar * nObj * nProt)
-  U = U.reshape((nVar, nObj, nProt))
-  
-  U = (np.zeros_like(U)).astype('float64')
+
+  epsilon = 0.0000001
+  nVar, nObj, nProt = distances.shape
+  U = np.zeros((nVar, nObj, nProt), dtype=np.float64)
 
   for v in range(0, nVar):
 
-    Uvar = np.arange(nObj * nProt)
-    Uvar = Uvar.reshape((nObj, nProt))
-    
-    Uvar = (np.zeros_like(Uvar)).astype('float64')
+    Uvar = np.zeros((nObj, nProt), dtype=np.float64)
   
     for i in range(0, nObj):
         
@@ -166,18 +153,15 @@ def updateMembership(distances, parM):
           for kk in range(0, nProt):
             dd = distances[vv][i,kk]
             
-            aux1 = ((int(d)+0.0000001)/(int(dd)+0.0000001))
-            aux2 = (1.0/(parM-1.0))
+            # print(f'D: {d}; DD: {dd}')
 
-            soma += pow(aux1, aux2)
+            aux1 = (d + epsilon) / (dd +epsilon)
+            aux2 = (1.0/(parM-1.0))
+            soma += np.power(aux1, aux2)
     
-        soma = pow(soma, -1.0)
-    
-        Uvar[i,k] = soma
+        Uvar[i,k] = np.power(soma, -1.0)
     
     U[v] = Uvar.copy()
-
-  # print(f'U: {U}')
   
   return U
 

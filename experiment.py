@@ -1,6 +1,7 @@
 import numpy as np
 import random
 import time
+import math
 from MFCM import MFCM
 from filters import *
 from sklearn.neighbors import KNeighborsClassifier
@@ -12,9 +13,11 @@ from sklearn.model_selection import StratifiedKFold, train_test_split
 from sklearn.model_selection import cross_val_score
 from datasets import selectDataset
 
-from sklearn.feature_selection import mutual_info_classif, chi2
+from sklearn.feature_selection import mutual_info_classif, mutual_info_regression
 
 from numba.core.errors import NumbaDeprecationWarning, NumbaPendingDeprecationWarning
+import pickle
+import os
 import warnings
 
 warnings.simplefilter('ignore', category=NumbaDeprecationWarning)
@@ -117,9 +120,20 @@ def atualizaTxt(nome, lista):
 	arquivo.write('\n')
 	arquivo.close()
 
+def save_list(list, dataset_name, i_externo, i_interno):
+    file_name = f'matrices/{dataset_name}/lista_{i_externo}{i_interno}.pkl'
+    with open(file_name, 'wb') as f:
+        pickle.dump(list, f)
+
+def load_list(dataset_name, i_externo, i_interno):
+    file_name = f'matrices/{dataset_name}/lista_{i_externo}{i_interno}.pkl'
+    with open(file_name, 'rb') as f:
+        mfcm = pickle.load(f)
+    return mfcm
+
 def filtro_mutual_info(X, y, numVar):
 
-    resultado_filtro = mutual_info_classif(X, y)
+    resultado_filtro = mutual_info_regression(X, y)
 
     resultado_filtro = [(pontuacao, indice) for indice, pontuacao in enumerate(resultado_filtro)]
     resultado_filtro.sort(key=lambda x: x[0])
@@ -130,60 +144,105 @@ def filtro_mutual_info(X, y, numVar):
 
     return X
 
-def media_listas(lista):
+def media_desvio_padrao(lista):
     medias = []
+    desvios_padrao = []
 
     for i in range(len(lista[0])):
         soma_scores = 0
         soma_tempos = 0
+        scores_quadrados = 0
+        tempos_quadrados = 0
         for lista_interna in lista:
             score, tempo = lista_interna[i]
             soma_scores += score
             soma_tempos += tempo
-        media_score = soma_scores / len(lista)
-        media_tempo = soma_tempos / len(lista)
+            scores_quadrados += score ** 2
+            tempos_quadrados += tempo ** 2
+
+        n = len(lista)
+        media_score = soma_scores / n
+        media_tempo = soma_tempos / n
+        variancia_score = (scores_quadrados / n) - (media_score ** 2)
+        variancia_tempo = (tempos_quadrados / n) - (media_tempo ** 2)
+        desvio_padrao_score = math.sqrt(variancia_score)
+        desvio_padrao_tempo = math.sqrt(variancia_tempo)
+        
         medias.append((media_score, media_tempo))
+        desvios_padrao.append((desvio_padrao_score, desvio_padrao_tempo))
 
-    return medias
+    return medias, desvios_padrao
 
-def cross_validation(data, target, seed, n_neighbors, n_folds, nFilterRep, nClasses, porcentagemVar, filter_name):
+def cross_validation(data, target, seed, n_neighbors, n_folds, nFilterRep, nClasses, porcentagemVar, filter_name, data_name, i_externo):
 
     kfold = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=seed)
 
-    resultados = []
+    numTotalFolds = 5
 
-    for train, test in kfold.split(data, target):
+    resultados = []
+    best_result = -1
+    best_data = []
+    best_mfcm = []
+
+    inicio = time.time()
+
+    for i_interno, (train, test) in enumerate(kfold.split(data, target)):
 
         print('Split')
 
         if filter_name == 'MFCM':
-            mfcm = exec_mfcm_filter(data[train], nFilterRep, nClasses)
+            if not os.path.exists(f'matrices/{data_name}'):
+                os.makedirs(f'matrices/{data_name}')
+            if os.path.exists(f'matrices/{data_name}/lista_{i_externo}{i_interno}.pkl'):
+                mfcm = load_list(data_name, i_externo, i_interno)
+            else:
+                mfcm = exec_mfcm_filter(data[train], nFilterRep, nClasses)
+                save_list(mfcm, data_name, i_externo, i_interno)
 
-        scores_porcentagem = []
+        # print(f'var: {data[test].shape[1]}')
+        numVar = (data[test].shape[1] // 2)
 
-        for i in porcentagemVar:
-            numVar = int(data.shape[1] * (i/100))
-            # print(f'Porcentagem de variáveis cortadas: {i}%')
-            # print(f'Número de variáveis apos filtro: {data.shape[1] - numVar}')
+        if filter_name == 'MFCM':
+            filtered_train = filter(data[train], mfcm, numVar, nClasses)
+            filtered_test = filter(data[test], mfcm, numVar, nClasses)
+        elif filter_name == 'MUTUAL':
+            filtered_train = filtro_mutual_info(data[train], target[train], numVar)
+            filtered_test = filtro_mutual_info(data[test], target[test], numVar)
 
+        score, tempo = exec_knn(filtered_train, filtered_test, target[train], target[test], n_neighbors)
+
+        if score > best_result:
+            best_result = score
             if filter_name == 'MFCM':
-                filtered_train = filter(data[train], mfcm, numVar, nClasses)
-                filtered_test = filter(data[test], mfcm, numVar, nClasses)
-            elif filter_name == 'MUTUAL':
-                filtered_train = filtro_mutual_info(data[train], target[train], numVar)
-                filtered_test = filtro_mutual_info(data[test], target[test], numVar)
+                best_mfcm = mfcm
+            best_data = (data[train], data[test], target[train], target[test])
 
-            score, time = exec_knn(filtered_train, filtered_test, target[train], target[test], n_neighbors)
+    fim = time.time()
 
-            scores_porcentagem.append((score, time))
+    # print(f'TEMPO DE EXECUÇÃO DA FOLD: {fim - inicio} segundos')
 
-        resultados.append(scores_porcentagem)
+    scores_porcentagem = []
+    data_train, data_test, target_train, target_test = best_data
 
-    resultados = media_listas(resultados)
+    for i in porcentagemVar:
+        numVar = int(data.shape[1] * (i/100))
+        # print(f'Porcentagem de variáveis cortadas: {i}%')
+        # print(f'Número de variáveis apos filtro: {data.shape[1] - numVar}')
 
-    print(resultados)
+        if filter_name == 'MFCM':
+            filtered_train = filter(data_train, best_mfcm, numVar, nClasses)
+            filtered_test = filter(data_test, best_mfcm, numVar, nClasses)
+        elif filter_name == 'MUTUAL':
+            filtered_train = filtro_mutual_info(data_train, target_train, numVar)
+            filtered_test = filtro_mutual_info(data_test, target_test, numVar)
 
-    return resultados
+        score, tempo = exec_knn(filtered_train, filtered_test, target_train, target_test, n_neighbors)
+
+        scores_porcentagem.append((score, tempo))
+
+    print(scores_porcentagem)
+
+    return scores_porcentagem
 
 def experimento(indexData, n_neighbors, nFilterRep):
 
@@ -201,8 +260,15 @@ def experimento(indexData, n_neighbors, nFilterRep):
     atualizaTxt('logs/resultados.txt', info_data)
 
     # Executando filtros e classificadores: 
-    result_mfcm = cross_validation(data, target, seed, n_neighbors, 5, nFilterRep, nClasses, porcentagemVar, 'MFCM')
-    result_mutual = cross_validation(data, target, seed, n_neighbors, 5, nFilterRep, nClasses, porcentagemVar, 'MUTUAL')
+
+    kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=seed)
+
+    lista_resultados = []
+
+    for i_externo, (train, test) in enumerate(kfold.split(data, target)):
+        result_mfcm = cross_validation(data[train], target[train], seed, n_neighbors, 5, nFilterRep, nClasses, porcentagemVar, 'MFCM', data_name, i_externo)
+        lista_resultados.append(result_mfcm)
+        result_mutual = cross_validation(data[train], target[train], seed, n_neighbors, 5, nFilterRep, nClasses, porcentagemVar, 'MUTUAL', data_name, i_externo)
 
     # Armazenando resultados:
     basics_info = (f'Seed: {seed} | Dataset: {data_name} | K: {n_neighbors} | MFCM Reps: {nFilterRep}\n')
@@ -218,9 +284,12 @@ def experimento(indexData, n_neighbors, nFilterRep):
         atualizaTxt('logs/resultados.txt', metrics_mutual)
         atualizaTxt('logs/resultados.txt', '')
 
+    print(f'RESULTADO FINAL MEDIA: {media_desvio_padrao(lista_resultados)[0]}')
+    print(f'RESULTADO FINAL DESVIO: {media_desvio_padrao(lista_resultados)[1]}')
+
 if __name__ == "__main__":
 
-    datasets = [1]
+    datasets = [3]
     n_neighbors = 5
     nRepMFCM = 10
 
@@ -229,3 +298,4 @@ if __name__ == "__main__":
     for _, id in enumerate(datasets):
         
         experimento(id, n_neighbors, nRepMFCM)
+        

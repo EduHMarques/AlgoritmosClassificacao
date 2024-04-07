@@ -22,6 +22,8 @@ def selectDataset(id):
 
 		data = scaler.fit_transform(data)
 
+		# Digits é um dataset de imagem
+
 		return (data, target, nClasses, dataset_name)
 	elif id == 3:
 		dataset_name = 'Wine'
@@ -41,7 +43,7 @@ def selectDataset(id):
 		return (data, target, nClasses, dataset_name)
 	elif id == 5:
 		dataset_name = 'Scene'
-		data = arff.loadarff('datasets/scene.arff')		# Scene | OPENML: ID 312 | 300 features
+		data = arff.loadarff('datasets/scene.arff')		# Scene | OPENML: ID 312 | 294 features	| 2407 instances
 		dataset = pd.DataFrame(data[0])
 		dataset[dataset.columns[-1]] = dataset.iloc[:,-1].astype(int)
 		dataset = dataset.drop(dataset.columns[294:299], axis=1)
@@ -50,13 +52,15 @@ def selectDataset(id):
 		dataset_ref = np.array(dataset_ref)
 		dataset = scaler.fit_transform(dataset)
 		nClasses = 2
+
+		# Scene é um dataset de imagem
 		
 		print("Dataset selecionado: Scene\n")
 		
 		return (dataset, dataset_ref, nClasses, dataset_name)
 	elif id == 6:
 		dataset_name = 'Madelon'
-		data = arff.loadarff('datasets/madelon.arff')		# Madelon | OPENML: ID 1485 | 500 features
+		data = arff.loadarff('datasets/madelon.arff')		# Madelon | OPENML: ID 1485 | 500 features | 4400 instances
 		dataset = pd.DataFrame(data[0])
 		dataset[dataset.columns[-1]] = dataset.iloc[:,-1].astype(int)
 
@@ -70,7 +74,7 @@ def selectDataset(id):
 		return (dataset, dataset_ref, nClasses, dataset_name)
 	elif id == 7:
 		dataset_name = 'Hiva Agnostic'
-		data = arff.loadarff('datasets/hiva_agnostic.arff')		# Hiva Agnostic | OPENML: ID 1039 | 1000 features
+		data = arff.loadarff('datasets/hiva_agnostic.arff')		# Hiva Agnostic | OPENML: ID 1039 | 1000 features | 4228 instances
 		dataset = pd.DataFrame(data[0])
 		dataset[dataset.columns[-1]] = dataset.iloc[:,-1].astype(int)
 
