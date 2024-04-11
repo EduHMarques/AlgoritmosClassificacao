@@ -1,3 +1,4 @@
+import pandas as pd
 import numpy as np
 import random
 import time
@@ -111,7 +112,7 @@ def exec_knn(data_train, data_test, target_train, target_test, n_neighbors):
     score = f1_score(target_test, target_pred, average="macro")
     
     # print(classification_report(target_test, target_pred))
-    print(f'F1 Score: {score}')
+    # print(f'F1 Score: {score}')
     return score, (end - start)
 
 def atualizaTxt(nome, lista):
@@ -251,27 +252,25 @@ def experimento(indexData, n_neighbors, nFilterRep):
     dataset = selectDataset(indexData)
 
     porcentagemVar = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90]
-    # porcentagemVar = [0, 25, 50, 75]
 
-    # K fold dataset original
     data, target, nClasses, data_name = dataset
 
     info_data = (f'############################## {data_name} ##############################\n')
     atualizaTxt('logs/resultados.txt', info_data)
 
-    # Executando filtros e classificadores: 
-
     kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=seed)
 
-    lista_resultados = []
+    lista_resultados_mfcm = []
 
     for i_externo, (train, test) in enumerate(kfold.split(data, target)):
         result_mfcm = cross_validation(data[train], target[train], seed, n_neighbors, 5, nFilterRep, nClasses, porcentagemVar, 'MFCM', data_name, i_externo)
-        lista_resultados.append(result_mfcm)
+        lista_resultados_mfcm.append(result_mfcm)
         result_mutual = cross_validation(data[train], target[train], seed, n_neighbors, 5, nFilterRep, nClasses, porcentagemVar, 'MUTUAL', data_name, i_externo)
 
+    print(len(lista_resultados_mfcm)) # [[f1 score, tempo], ..., [f1 score, tempo]] 5 elementos
+
     # Armazenando resultados:
-    basics_info = (f'Seed: {seed} | Dataset: {data_name} | K: {n_neighbors} | MFCM Reps: {nFilterRep}\n')
+    basics_info = (f'Seed: {seed} | Dataset: {data_name} | K: {n_neighbors} | MFCM Reps: {nFilterRep} | Neighbors: {n_neighbors}')
     atualizaTxt('logs/resultados.txt', basics_info)
 
     for _, i in enumerate(result_mfcm):
@@ -279,13 +278,28 @@ def experimento(indexData, n_neighbors, nFilterRep):
         metrics_mfcm = (f'Com filtro MFCM - F1 Score: {i[0]} | Tempo: {i[1]}')
         metrics_mutual = (f'Com filtro Mutual - F1 Score: {result_mutual[_][0]} | Tempo: {result_mutual[_][1]}')
 
-        atualizaTxt('logs/resultados.txt', var_info)
-        atualizaTxt('logs/resultados.txt', metrics_mfcm)
-        atualizaTxt('logs/resultados.txt', metrics_mutual)
-        atualizaTxt('logs/resultados.txt', '')
+        # atualizaTxt('logs/resultados.txt', var_info)
+        # atualizaTxt('logs/resultados.txt', metrics_mfcm)
+        # atualizaTxt('logs/resultados.txt', metrics_mutual)
+        # atualizaTxt('logs/resultados.txt', '')
 
-    print(f'RESULTADO FINAL MEDIA: {media_desvio_padrao(lista_resultados)[0]}')
-    print(f'RESULTADO FINAL DESVIO: {media_desvio_padrao(lista_resultados)[1]}')
+    print(f'RESULTADO FINAL MEDIA: {media_desvio_padrao(lista_resultados_mfcm)[0]}')
+    print(f'RESULTADO FINAL DESVIO: {media_desvio_padrao(lista_resultados_mfcm)[1]}')
+
+    variables_cut_info = f'Porcentagens de variaveis cortadas: {porcentagemVar}'
+
+    path = f'resultados/{data_name}'
+    if not os.path.exists(f'resultados/{data_name}'):
+        os.makedirs(path)
+    os.makedirs(f'resultados/{data_name}/resultado_{len(os.listdir(path)) + 1}')
+    atualizaTxt(f'resultados/{data_name}/resultado_{len(os.listdir(path))}/parameters.txt', basics_info)
+    atualizaTxt(f'resultados/{data_name}/resultado_{len(os.listdir(path))}/parameters.txt', variables_cut_info)
+
+    df = pd.DataFrame(media_desvio_padrao(lista_resultados_mfcm)[0]).transpose()
+    df.rename(index={0: 'Media Score', 1: 'Media Tempo'}, inplace=True)
+    df.columns = ['Porc ' + str(i*10) for i in range(len(df.columns))]
+    df.to_csv(f'resultados/{data_name}/resultado_{len(os.listdir(path))}/results.csv', index=False)
+    print(df)
 
 if __name__ == "__main__":
 
