@@ -2,7 +2,7 @@ import numpy as np
 from numba import jit, cuda
 from timeit import default_timer as timer
 
-@jit(target_backend='cuda')
+@jit(target='cuda')
 def MFCM(data, centers, parM):
 
   start = timer()

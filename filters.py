@@ -25,16 +25,16 @@ def sum_filter(data, U, nClusters):
 def variance_filter(data, U, nClusters):
     V = []
     nVar = data.shape[1]
+    nObj = data.shape[0]
 
     for i in range(0, nVar):
         # print(f'i: {i}')
-        aTotal = [] # Relevância total
-        nObj = data.shape[0]
+        aTotal = [] # relevancia total
 
         for j in range(0, nClusters):  
             a = []
             for k in range(0, nObj):
-                u = U[i][k][j] # Acessa o grau de pertinência do objeto k ao cluster j em relação a variável i
+                u = U[i][k][j] # acessa o grau de pertinência do objeto k ao cluster j em relação a variável i
                 a.append(u)
         
             a = np.asarray(a)
@@ -42,13 +42,11 @@ def variance_filter(data, U, nClusters):
             aTotal.append(var)
 
         aTotal = np.asarray(aTotal)
-        # print(aTotal)
         media = np.mean(aTotal)
 
         V.append((round(media * 100, 5), i))
     
     return (V, 'Filtro por Variância')
-
 
 def apply_filter(dataset, result, n):
 

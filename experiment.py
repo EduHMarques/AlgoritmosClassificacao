@@ -8,8 +8,7 @@ from filters import *
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn import preprocessing
 from sklearn.preprocessing import StandardScaler
-from sklearn.datasets import load_iris, load_digits, load_wine, load_breast_cancer
-from sklearn.metrics import classification_report, f1_score
+from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_score
 from sklearn.model_selection import StratifiedKFold, train_test_split
 from sklearn.model_selection import cross_val_score
 from datasets import selectDataset
@@ -109,11 +108,14 @@ def exec_knn(data_train, data_test, target_train, target_test, n_neighbors):
 
     end = time.time()
 
-    score = f1_score(target_test, target_pred, average="macro")
+    f1 = f1_score(target_test, target_pred, average="macro")
+    accuracy = accuracy_score(target_test, target_pred)
+    precision = precision_score(target_test, target_pred, average="macro")
+    recall = recall_score(target_test, target_pred, average="macro")
     
     # print(classification_report(target_test, target_pred))
     # print(f'F1 Score: {score}')
-    return score, (end - start)
+    return f1, accuracy, precision, recall, (end - start)
 
 def atualizaTxt(nome, lista):
 	arquivo = open(nome, 'a')
@@ -146,33 +148,57 @@ def filtro_mutual_info(X, y, numVar):
     return X
 
 def media_desvio_padrao(lista):
-    medias = []
-    desvios_padrao = []
+    f1_avg = []
+    accuracy_avg = []
+    precision_avg = []
+    recall_avg = []
+    time_avg = []
 
-    for i in range(len(lista[0])):
-        soma_scores = 0
-        soma_tempos = 0
-        scores_quadrados = 0
-        tempos_quadrados = 0
-        for lista_interna in lista:
-            score, tempo = lista_interna[i]
-            soma_scores += score
-            soma_tempos += tempo
-            scores_quadrados += score ** 2
-            tempos_quadrados += tempo ** 2
+    f1_std = []
+    accuracy_std = []
+    precision_std = []
+    recall_std = []
+    time_std = []
 
-        n = len(lista)
-        media_score = soma_scores / n
-        media_tempo = soma_tempos / n
-        variancia_score = (scores_quadrados / n) - (media_score ** 2)
-        variancia_tempo = (tempos_quadrados / n) - (media_tempo ** 2)
-        desvio_padrao_score = math.sqrt(variancia_score)
-        desvio_padrao_tempo = math.sqrt(variancia_tempo)
+    for percentage in range(len(lista[0])):
+        f1_values = []
+        accuracy_values = []
+        precision_values = []
+        recall_values = []
+        time_values = []
+
+        for fold in lista:
+            f1_values.append(fold[percentage][0])
+            accuracy_values.append(fold[percentage][1])
+            precision_values.append(fold[percentage][2])
+            recall_values.append(fold[percentage][3])
+            time_values.append(fold[percentage][4])
+
+        f1_avg.append(np.mean(f1_values))
+        accuracy_avg.append(np.mean(accuracy_values))
+        precision_avg.append(np.mean(precision_values))
+        recall_avg.append(np.mean(recall_values))
+        time_avg.append(np.mean(time_values))
         
-        medias.append((media_score, media_tempo))
-        desvios_padrao.append((desvio_padrao_score, desvio_padrao_tempo))
+        f1_std.append(np.std(f1_values))
+        accuracy_std.append(np.std(accuracy_values))
+        precision_std.append(np.std(precision_values))
+        recall_std.append(np.std(recall_values))
+        time_std.append(np.std(time_values))
 
-    return medias, desvios_padrao
+    print("Médias:")
+    print("F1-Score:", f1_avg)
+    print("Acurácia:", accuracy_avg)
+    print("Precisão:", precision_avg)
+    print("Recall:", recall_avg)
+
+    print("\nDesvios Padrão:")
+    print("F1-Score:", f1_std)
+    print("Acurácia:", accuracy_std)
+    print("Precisão:", precision_std)
+    print("Recall:", recall_std)
+
+    return f1_avg, accuracy_avg, precision_avg, recall_avg, time_avg, f1_std, accuracy_std, precision_std, recall_std, time_std
 
 def cross_validation(data, target, seed, n_neighbors, n_folds, nFilterRep, nClasses, porcentagemVar, filter_name, data_name, i_externo):
 
@@ -189,7 +215,7 @@ def cross_validation(data, target, seed, n_neighbors, n_folds, nFilterRep, nClas
 
     for i_interno, (train, test) in enumerate(kfold.split(data, target)):
 
-        print('Split')
+        # print('Split')
 
         if filter_name == 'MFCM':
             if not os.path.exists(f'matrices/{data_name}'):
@@ -210,10 +236,10 @@ def cross_validation(data, target, seed, n_neighbors, n_folds, nFilterRep, nClas
             filtered_train = filtro_mutual_info(data[train], target[train], numVar)
             filtered_test = filtro_mutual_info(data[test], target[test], numVar)
 
-        score, tempo = exec_knn(filtered_train, filtered_test, target[train], target[test], n_neighbors)
+        f1, accuracy, precision, recall, tempo = exec_knn(filtered_train, filtered_test, target[train], target[test], n_neighbors)
 
-        if score > best_result:
-            best_result = score
+        if f1 > best_result:
+            best_result = f1
             if filter_name == 'MFCM':
                 best_mfcm = mfcm
             best_data = (data[train], data[test], target[train], target[test])
@@ -237,11 +263,11 @@ def cross_validation(data, target, seed, n_neighbors, n_folds, nFilterRep, nClas
             filtered_train = filtro_mutual_info(data_train, target_train, numVar)
             filtered_test = filtro_mutual_info(data_test, target_test, numVar)
 
-        score, tempo = exec_knn(filtered_train, filtered_test, target_train, target_test, n_neighbors)
+        f1, accuracy, precision, recall, tempo = exec_knn(filtered_train, filtered_test, target_train, target_test, n_neighbors)
 
-        scores_porcentagem.append((score, tempo))
+        scores_porcentagem.append((f1, accuracy, precision, recall, tempo))
 
-    print(scores_porcentagem)
+    # print(scores_porcentagem)
 
     return scores_porcentagem
 
@@ -255,55 +281,62 @@ def experimento(indexData, n_neighbors, nFilterRep):
 
     data, target, nClasses, data_name = dataset
 
-    info_data = (f'############################## {data_name} ##############################\n')
-    atualizaTxt('logs/resultados.txt', info_data)
-
     kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=seed)
 
     lista_resultados_mfcm = []
 
     for i_externo, (train, test) in enumerate(kfold.split(data, target)):
         result_mfcm = cross_validation(data[train], target[train], seed, n_neighbors, 5, nFilterRep, nClasses, porcentagemVar, 'MFCM', data_name, i_externo)
-        lista_resultados_mfcm.append(result_mfcm)
         result_mutual = cross_validation(data[train], target[train], seed, n_neighbors, 5, nFilterRep, nClasses, porcentagemVar, 'MUTUAL', data_name, i_externo)
+        lista_resultados_mfcm.append(result_mfcm)
 
-    print(len(lista_resultados_mfcm)) # [[f1 score, tempo], ..., [f1 score, tempo]] 5 elementos
+    f1_avg, accuracy_avg, precision_avg, recall_avg, time_avg, f1_std, accuracy_std, precision_std, recall_std, time_std = media_desvio_padrao(lista_resultados_mfcm)
 
-    # Armazenando resultados:
-    basics_info = (f'Seed: {seed} | Dataset: {data_name} | K: {n_neighbors} | MFCM Reps: {nFilterRep} | Neighbors: {n_neighbors}')
-    atualizaTxt('logs/resultados.txt', basics_info)
+    data = {
+        'F1-Score (Avg)': f1_avg,
+        'Acurácia (Avg)': accuracy_avg,
+        'Precisão (Avg)': precision_avg,
+        'Recall (Avg)': recall_avg,
+        'Tempo (Avg)': time_avg,
+        'F1-Score (Std)': f1_std,
+        'Acurácia (Std)': accuracy_std,
+        'Precisão (Std)': precision_std,
+        'Recall (Std)': recall_std,
+        'Tempo (Std)': time_std
+    }
 
-    for _, i in enumerate(result_mfcm):
-        var_info = (f'Porcentagem de variaveis cortadas: {porcentagemVar[_]}%')
-        metrics_mfcm = (f'Com filtro MFCM - F1 Score: {i[0]} | Tempo: {i[1]}')
-        metrics_mutual = (f'Com filtro Mutual - F1 Score: {result_mutual[_][0]} | Tempo: {result_mutual[_][1]}')
-
-        # atualizaTxt('logs/resultados.txt', var_info)
-        # atualizaTxt('logs/resultados.txt', metrics_mfcm)
-        # atualizaTxt('logs/resultados.txt', metrics_mutual)
-        # atualizaTxt('logs/resultados.txt', '')
-
-    print(f'RESULTADO FINAL MEDIA: {media_desvio_padrao(lista_resultados_mfcm)[0]}')
-    print(f'RESULTADO FINAL DESVIO: {media_desvio_padrao(lista_resultados_mfcm)[1]}')
-
-    variables_cut_info = f'Porcentagens de variaveis cortadas: {porcentagemVar}'
-
+    # criando txt de parametros
     path = f'resultados/{data_name}'
     if not os.path.exists(f'resultados/{data_name}'):
         os.makedirs(path)
+    basics_info = (f'Seed: {seed} | Dataset: {data_name} | K: {n_neighbors} | MFCM Reps: {nFilterRep} | Neighbors: {n_neighbors}')
+    variables_cut_info = f'Porcentagens de variaveis cortadas: {porcentagemVar}'
     os.makedirs(f'resultados/{data_name}/resultado_{len(os.listdir(path)) + 1}')
     atualizaTxt(f'resultados/{data_name}/resultado_{len(os.listdir(path))}/parameters.txt', basics_info)
     atualizaTxt(f'resultados/{data_name}/resultado_{len(os.listdir(path))}/parameters.txt', variables_cut_info)
 
-    df = pd.DataFrame(media_desvio_padrao(lista_resultados_mfcm)[0]).transpose()
-    df.rename(index={0: 'Media Score', 1: 'Media Tempo'}, inplace=True)
-    df.columns = ['Porc ' + str(i*10) for i in range(len(df.columns))]
-    df.to_csv(f'resultados/{data_name}/resultado_{len(os.listdir(path))}/results.csv', index=False)
+    # criando txt de resultados
+    atualizaTxt(f'resultados/{data_name}/resultado_{len(os.listdir(path))}/resultados.txt', basics_info)
+    for _, i in enumerate(result_mfcm):
+        var_info = (f'Porcentagem de variaveis cortadas: {porcentagemVar[_]}%')
+        metrics_mfcm = (f'Com filtro MFCM - F1 Score: {i[0]} | Tempo: {i[4]}')
+        metrics_mutual = (f'Com filtro Mutual - F1 Score: {result_mutual[_][0]} | Tempo: {result_mutual[_][4]}')
+
+        atualizaTxt(f'resultados/{data_name}/resultado_{len(os.listdir(path))}/resultados.txt', var_info)
+        atualizaTxt(f'resultados/{data_name}/resultado_{len(os.listdir(path))}/resultados.txt', metrics_mfcm)
+        atualizaTxt(f'resultados/{data_name}/resultado_{len(os.listdir(path))}/resultados.txt', metrics_mutual)
+        atualizaTxt(f'resultados/{data_name}/resultado_{len(os.listdir(path))}/resultados.txt', '')
+
+    # criando dataframe de resultados
+    df = pd.DataFrame(data)
+    df = df.transpose()
+    df.columns = ['Porcentagem ' + str(i*10) for i in range(len(df.columns))]
+    df.to_csv(f'resultados/{data_name}/resultado_{len(os.listdir(path))}/mfcm_stats.csv', index=False)
     print(df)
 
 if __name__ == "__main__":
 
-    datasets = [3]
+    datasets = [1]
     n_neighbors = 5
     nRepMFCM = 10
 

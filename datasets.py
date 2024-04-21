@@ -14,6 +14,8 @@ def selectDataset(id):
 
 		data = scaler.fit_transform(data)
 
+		print("Dataset selecionado: Iris\n")
+
 		return (data, target, nClasses, dataset_name)
 	elif id == 2:
 		dataset_name = 'Digits'
@@ -21,6 +23,8 @@ def selectDataset(id):
 		data, target = load_digits(return_X_y=True)		# Digits | OPENML: ID 28 | 64 features | 1797 instances
 
 		data = scaler.fit_transform(data)
+
+		print("Dataset selecionado: Digits\n")
 
 		# Digits é um dataset de imagem
 
@@ -32,6 +36,8 @@ def selectDataset(id):
 
 		data = scaler.fit_transform(data)
 
+		print("Dataset selecionado: Wine\n")
+
 		return (data, target, nClasses, dataset_name)
 	elif id == 4:
 		dataset_name = 'Breast Cancer'
@@ -39,6 +45,8 @@ def selectDataset(id):
 		data, target = load_breast_cancer(return_X_y=True)	# Breast cancer | UCI: ID 17 | 30 features | 569 instances
 
 		data = scaler.fit_transform(data)
+
+		print("Dataset selecionado: Breast Cancer\n")
 
 		return (data, target, nClasses, dataset_name)
 	elif id == 5:
