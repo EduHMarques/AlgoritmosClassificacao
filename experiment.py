@@ -253,6 +253,7 @@ def cross_validation(data, target, seed, n_neighbors, n_folds, nFilterRep, nClas
 
     for i in porcentagemVar:
         numVar = int(data.shape[1] * (i/100))
+        print(numVar)
         # print(f'Porcentagem de variáveis cortadas: {i}%')
         # print(f'Número de variáveis apos filtro: {data.shape[1] - numVar}')
 
@@ -277,7 +278,8 @@ def experimento(indexData, n_neighbors, nFilterRep):
 
     dataset = selectDataset(indexData)
 
-    porcentagemVar = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90]
+    # porcentagemVar = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90]
+    porcentagemVar = [0]
 
     data, target, nClasses, data_name = dataset
 

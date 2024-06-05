@@ -1,0 +1,41 @@
+Seed: 42 | Dataset: Musk Version 1 | K: 5 | MFCM Reps: 10 | Neighbors: 5
+Porcentagem de variaveis cortadas: 0%
+Com filtro MFCM - F1 Score: 0.9074943488089029 | Tempo: 0.0062024593353271484
+Com filtro Mutual - F1 Score: 0.9074943488089029 | Tempo: 0.006892204284667969
+
+Porcentagem de variaveis cortadas: 10%
+Com filtro MFCM - F1 Score: 0.4492753623188406 | Tempo: 0.0071756839752197266
+Com filtro Mutual - F1 Score: 0.6260251503553855 | Tempo: 0.00658106803894043
+
+Porcentagem de variaveis cortadas: 20%
+Com filtro MFCM - F1 Score: 0.48070175438596496 | Tempo: 0.005925655364990234
+Com filtro Mutual - F1 Score: 0.68824683431425 | Tempo: 0.005320310592651367
+
+Porcentagem de variaveis cortadas: 30%
+Com filtro MFCM - F1 Score: 0.49816581071166544 | Tempo: 0.0059435367584228516
+Com filtro Mutual - F1 Score: 0.735191637630662 | Tempo: 0.005755901336669922
+
+Porcentagem de variaveis cortadas: 40%
+Com filtro MFCM - F1 Score: 0.4768115942028986 | Tempo: 0.006361484527587891
+Com filtro Mutual - F1 Score: 0.5929824561403508 | Tempo: 0.005441427230834961
+
+Porcentagem de variaveis cortadas: 50%
+Com filtro MFCM - F1 Score: 0.5260454878943506 | Tempo: 0.006631374359130859
+Com filtro Mutual - F1 Score: 0.7224830464267084 | Tempo: 0.0058634281158447266
+
+Porcentagem de variaveis cortadas: 60%
+Com filtro MFCM - F1 Score: 0.48070175438596496 | Tempo: 0.005978584289550781
+Com filtro Mutual - F1 Score: 0.7177718832891247 | Tempo: 0.006867170333862305
+
+Porcentagem de variaveis cortadas: 70%
+Com filtro MFCM - F1 Score: 0.6102564102564103 | Tempo: 0.007326364517211914
+Com filtro Mutual - F1 Score: 0.841995841995842 | Tempo: 0.0062482357025146484
+
+Porcentagem de variaveis cortadas: 80%
+Com filtro MFCM - F1 Score: 0.5110415579899148 | Tempo: 0.005973339080810547
+Com filtro Mutual - F1 Score: 0.841995841995842 | Tempo: 0.004922151565551758
+
+Porcentagem de variaveis cortadas: 90%
+Com filtro MFCM - F1 Score: 0.4044104246400584 | Tempo: 0.0068912506103515625
+Com filtro Mutual - F1 Score: 0.868421052631579 | Tempo: 0.005861997604370117
+

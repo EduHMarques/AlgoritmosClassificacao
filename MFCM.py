@@ -1,8 +1,8 @@
 import numpy as np
-from numba import jit, cuda
+from numba import jit, cuda, njit
 from timeit import default_timer as timer
 
-@jit(target='cuda')
+# @jit(target='cuda')
 def MFCM(data, centers, parM):
 
   start = timer()
@@ -130,7 +130,7 @@ def updateDistances(data, prototypes):
 
   return D
 
-@jit(target_backend='cuda')
+# @jit(target_backend='cuda')
 def updateMembership(distances, parM):
 
   epsilon = 0.0000001

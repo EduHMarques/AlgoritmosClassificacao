@@ -27,7 +27,7 @@ def execute(nRep, dataset, centersAll):
     best_centers = 0
 
     for r in range(nRep):
-        # print(f'MFCM rep: {r}')
+        print(f'MFCM rep: {r}')
         centers = list(map(int, centersAll[r,].tolist()))
 
         resp = MFCM(dataset, centers, 2)
@@ -182,63 +182,52 @@ def media_desvio_padrao(lista):
 
     return f1_avg, accuracy_avg, precision_avg, recall_avg, time_avg, f1_std, accuracy_std, precision_std, recall_std, time_std
 
-def cross_validation(data, target, seed, n_neighbors, n_folds, nFilterRep, nClasses, porcentagemVar, filter_name, data_name, i_externo):
+def cross_validation(data, target, seed, n_neighbors, nFilterRep, nClasses, porcentagemVar, filter_name):
 
-    kfold = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=seed)
+    # inicio = time.time()
 
-    numTotalFolds = 5
+        # print('Fold Interno')
 
-    resultados = []
-    best_result = -1
-    best_data = []
-    best_mfcm = []
+        # # print(f'var: {data[test].shape[1]}')
+        # numVar = (data[test].shape[1] // 2)
 
-    inicio = time.time()
+        # if filter_name == 'MFCM':
 
-    for i_interno, (train, test) in enumerate(kfold.split(data, target)):
-        print('Fold Interno')
+        #     mfcm = exec_mfcm_filter(data, nFilterRep, nClasses)
 
-        # print(f'var: {data[test].shape[1]}')
-        numVar = (data[test].shape[1] // 2)
+        #     filtered_train = filter(data[train], mfcm, numVar, nClasses)
+        #     filtered_test = filter(data[test], mfcm, numVar, nClasses)
+        # elif filter_name == 'MUTUAL':
+        #     filtered_train = filtro_mutual_info(data[train], target[train], numVar)
+        #     filtered_test = filtro_mutual_info(data[test], target[test], numVar)
 
-        if filter_name == 'MFCM':
+        # f1, accuracy, precision, recall, tempo = exec_knn(filtered_train, filtered_test, target[train], target[test], n_neighbors)
 
-            mfcm = exec_mfcm_filter(data[train], nFilterRep, nClasses)
+        # if f1 > best_result:
+        #     best_result = f1
+        #     if filter_name == 'MFCM':
+        #         best_mfcm = mfcm
+        #     best_data = (data[train], data[test], target[train], target[test])
 
-            filtered_train = filter(data[train], mfcm, numVar, nClasses)
-            filtered_test = filter(data[test], mfcm, numVar, nClasses)
-        elif filter_name == 'MUTUAL':
-            filtered_train = filtro_mutual_info(data[train], target[train], numVar)
-            filtered_test = filtro_mutual_info(data[test], target[test], numVar)
-
-        f1, accuracy, precision, recall, tempo = exec_knn(filtered_train, filtered_test, target[train], target[test], n_neighbors)
-
-        if f1 > best_result:
-            best_result = f1
-            if filter_name == 'MFCM':
-                best_mfcm = mfcm
-            best_data = (data[train], data[test], target[train], target[test])
-
-    fim = time.time()
+    # fim = time.time()
 
     # print(f'TEMPO DE EXECUÇÃO DA FOLD: {fim - inicio} segundos')
 
+    X_train, X_test, y_train, y_test = train_test_split(data, target, test_size=0.2, random_state=seed)
     scores_porcentagem = []
-    data_train, data_test, target_train, target_test = best_data
 
     for i in porcentagemVar:
         numVar = int(data.shape[1] * (i/100))
-        # print(f'Porcentagem de variáveis cortadas: {i}%')
-        # print(f'Número de variáveis apos filtro: {data.shape[1] - numVar}')
 
         if filter_name == 'MFCM':
-            filtered_train = filter(data_train, best_mfcm, numVar, nClasses)
-            filtered_test = filter(data_test, best_mfcm, numVar, nClasses)
+            mfcm = exec_mfcm_filter(data, nFilterRep, nClasses)
+            filtered_train = filter(X_train, mfcm, numVar, nClasses)
+            filtered_test = filter(X_test, mfcm, numVar, nClasses)
         elif filter_name == 'MUTUAL':
-            filtered_train = filtro_mutual_info(data_train, target_train, numVar)
-            filtered_test = filtro_mutual_info(data_test, target_test, numVar)
+            filtered_train = filtro_mutual_info(X_train, y_train, numVar)
+            filtered_test = filtro_mutual_info(X_test, y_test, numVar)
 
-        f1, accuracy, precision, recall, tempo = exec_knn(filtered_train, filtered_test, target_train, target_test, n_neighbors)
+        f1, accuracy, precision, recall, tempo = exec_knn(filtered_train, filtered_test, y_train, y_test, n_neighbors)
 
         scores_porcentagem.append((f1, accuracy, precision, recall, tempo))
 
@@ -249,7 +238,8 @@ def cross_validation(data, target, seed, n_neighbors, n_folds, nFilterRep, nClas
 def synthetic(indexData, n_neighbors, nFilterRep, mc):
 
     seed = 42
-    porcentagemVar = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90]
+    # porcentagemVar = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90]
+    porcentagemVar = [0, 25, 50, 75]
 
     f1_avg_list, acc_avg_list, prec_avg_list, rec_avg_list, time_avg_list, f1_std_list, acc_std_list, prec_std_list, rec_std_list, time_std_list = [], [], [], [], [], [], [], [], [], []
 
@@ -259,48 +249,46 @@ def synthetic(indexData, n_neighbors, nFilterRep, mc):
 
         data, target, nClasses, data_name = dataset
 
-        kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=seed)
+        lista_resultados_mfcm = []  
 
-        lista_resultados_mfcm = []
+        result_mfcm = cross_validation(data, target, seed, n_neighbors, nFilterRep, nClasses, porcentagemVar, 'MFCM')
+        result_mutual = cross_validation(data, target, seed, n_neighbors, nFilterRep, nClasses, porcentagemVar, 'MUTUAL')
+        lista_resultados_mfcm.append(result_mfcm)
 
-        for i_externo, (train, test) in enumerate(kfold.split(data, target)):
-            print('Fold Externo')
-            result_mfcm = cross_validation(data[train], target[train], seed, n_neighbors, 5, nFilterRep, nClasses, porcentagemVar, 'MFCM', data_name, i_externo)
-            result_mutual = cross_validation(data[train], target[train], seed, n_neighbors, 5, nFilterRep, nClasses, porcentagemVar, 'MUTUAL', data_name, i_externo)
-            lista_resultados_mfcm.append(result_mfcm)
+    f1_avg, accuracy_avg, precision_avg, recall_avg, time_avg, f1_std, accuracy_std, precision_std, recall_std, time_std = media_desvio_padrao(lista_resultados_mfcm)
+    f1_avg_list.append(f1_avg)
+    acc_avg_list.append(accuracy_avg)
+    prec_avg_list.append(precision_avg)
+    rec_avg_list.append(recall_avg)
+    time_avg_list.append(time_avg)
+    f1_std_list.append(f1_std)
+    acc_std_list.append(accuracy_std)
+    prec_std_list.append(precision_std)
+    rec_std_list.append(recall_std)
+    time_std_list.append(time_std)
 
-        f1_avg, accuracy_avg, precision_avg, recall_avg, time_avg, f1_std, accuracy_std, precision_std, recall_std, time_std = media_desvio_padrao(lista_resultados_mfcm)
-        f1_avg_list.append(f1_avg)
-        acc_avg_list.append(accuracy_avg)
-        prec_avg_list.append(precision_avg)
-        rec_avg_list.append(recall_avg)
-        time_avg_list.append(time_avg)
-        f1_std_list.append(f1_std)
-        acc_std_list.append(accuracy_std)
-        prec_std_list.append(precision_std)
-        rec_std_list.append(recall_std)
-        time_std_list.append(time_std)
+    # print(lista_resultados_mfcm)
 
-    print(f'TAMANHO LISTA: {len(f1_avg_list)}')
+    # print(f'TAMANHO LISTA: {len(f1_avg_list)}')
 
-    print(f'Média F1 Score: {sum(f1_avg_list) / len(f1_avg_list)}')
-    print(f'Média Acurácia: {sum(acc_avg_list) / len(acc_avg_list)}')
-    print(f'Média Precisão: {sum(prec_avg_list) / len(prec_avg_list)}')
-    print(f'Média Recall: {sum(rec_avg_list) / len(rec_avg_list)}')
-    print(f'Média Tempo: {sum(time_avg_list) / len(time_avg_list)}')
+    # print(f'Média F1 Score: {sum(f1_avg_list) / len(f1_avg_list)}')
+    # print(f'Média Acurácia: {sum(acc_avg_list) / len(acc_avg_list)}')
+    # print(f'Média Precisão: {sum(prec_avg_list) / len(prec_avg_list)}')
+    # print(f'Média Recall: {sum(rec_avg_list) / len(rec_avg_list)}')
+    # print(f'Média Tempo: {sum(time_avg_list) / len(time_avg_list)}')
 
-    data = {
-        'F1-Score (Avg)': f1_avg,
-        'Acurácia (Avg)': accuracy_avg,
-        'Precisão (Avg)': precision_avg,
-        'Recall (Avg)': recall_avg,
-        'Tempo (Avg)': time_avg,
-        'F1-Score (Std)': f1_std,
-        'Acurácia (Std)': accuracy_std,
-        'Precisão (Std)': precision_std,
-        'Recall (Std)': recall_std,
-        'Tempo (Std)': time_std
-    }
+    # data = {
+    #     'F1-Score (Avg)': f1_avg,
+    #     'Acurácia (Avg)': accuracy_avg,
+    #     'Precisão (Avg)': precision_avg,
+    #     'Recall (Avg)': recall_avg,
+    #     'Tempo (Avg)': time_avg,
+    #     'F1-Score (Std)': f1_std,
+    #     'Acurácia (Std)': accuracy_std,
+    #     'Precisão (Std)': precision_std,
+    #     'Recall (Std)': recall_std,
+    #     'Tempo (Std)': time_std
+    # }
 
     # criando txt de parametros
     # path = f'resultados/{data_name}'
@@ -335,10 +323,10 @@ if __name__ == "__main__":
 
     datasets = [1]
     n_neighbors = 5
-    monteCarlo = 3
+    monteCarlo = 1
     nRepMFCM = 10
 
-    synthetic(10, n_neighbors, nRepMFCM, monteCarlo)
+    synthetic(16, n_neighbors, nRepMFCM, monteCarlo)
 
     # for _, id in enumerate(datasets):
         

@@ -1,0 +1,41 @@
+Seed: 42 | Dataset: Iris | K: 5 | MFCM Reps: 10 | Neighbors: 5
+Porcentagem de variaveis cortadas: 0%
+Com filtro MFCM - F1 Score: 0.9581699346405229 | Tempo: 0.000980377197265625
+Com filtro Mutual - F1 Score: 1.0 | Tempo: 0.0009827613830566406
+
+Porcentagem de variaveis cortadas: 10%
+Com filtro MFCM - F1 Score: 0.9581699346405229 | Tempo: 0.0009903907775878906
+Com filtro Mutual - F1 Score: 1.0 | Tempo: 0.0009942054748535156
+
+Porcentagem de variaveis cortadas: 20%
+Com filtro MFCM - F1 Score: 0.9581699346405229 | Tempo: 0.001012563705444336
+Com filtro Mutual - F1 Score: 1.0 | Tempo: 0.0009806156158447266
+
+Porcentagem de variaveis cortadas: 30%
+Com filtro MFCM - F1 Score: 0.8745098039215686 | Tempo: 0.0013306140899658203
+Com filtro Mutual - F1 Score: 1.0 | Tempo: 0.0
+
+Porcentagem de variaveis cortadas: 40%
+Com filtro MFCM - F1 Score: 0.8745098039215686 | Tempo: 0.0
+Com filtro Mutual - F1 Score: 1.0 | Tempo: 0.0009968280792236328
+
+Porcentagem de variaveis cortadas: 50%
+Com filtro MFCM - F1 Score: 0.8333333333333334 | Tempo: 0.0009887218475341797
+Com filtro Mutual - F1 Score: 1.0 | Tempo: 0.0009851455688476562
+
+Porcentagem de variaveis cortadas: 60%
+Com filtro MFCM - F1 Score: 0.8333333333333334 | Tempo: 0.0009987354278564453
+Com filtro Mutual - F1 Score: 1.0 | Tempo: 0.0009815692901611328
+
+Porcentagem de variaveis cortadas: 70%
+Com filtro MFCM - F1 Score: 0.8333333333333334 | Tempo: 0.0009887218475341797
+Com filtro Mutual - F1 Score: 1.0 | Tempo: 0.001104116439819336
+
+Porcentagem de variaveis cortadas: 80%
+Com filtro MFCM - F1 Score: 0.10526315789473684 | Tempo: 0.0010056495666503906
+Com filtro Mutual - F1 Score: 1.0 | Tempo: 0.000982522964477539
+
+Porcentagem de variaveis cortadas: 90%
+Com filtro MFCM - F1 Score: 0.10526315789473684 | Tempo: 0.0
+Com filtro Mutual - F1 Score: 1.0 | Tempo: 0.0009827613830566406
+

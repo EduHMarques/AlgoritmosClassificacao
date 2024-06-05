@@ -124,12 +124,12 @@ def selectDataset(id):
 		mu_31 = 18
 		mu_32 = 14
 
-		sigma_11 = 9
-		sigma_12 = 3
-		sigma_21 = 3
-		sigma_22 = 10
-		sigma_31 = 5
-		sigma_32 = 6
+		sigma_11 = 81
+		sigma_12 = 9
+		sigma_21 = 9
+		sigma_22 = 100
+		sigma_31 = 25
+		sigma_32 = 36
 
 		x1 = np.random.normal(mu_11, sigma_11, n1)
 		y1 = np.random.normal(mu_12, sigma_12, n1)
@@ -152,8 +152,142 @@ def selectDataset(id):
 		data_ref = np.concatenate((refClass1, refClass2, refClass3))
 
 		return [synthetic, data_ref, nClasses, "Pimentel2013 - Data 1"]
-	
 	elif id == 10:
+		# (Dataset 2 do 'pimentel2013')
+		n1 = 200
+		n2 = 100
+		n3 = 50
+		
+		n = n1 + n2 + n3 
+		
+		nClasses = 3
+		
+		mu_11 = 0
+		mu_12 = 0
+		mu_21 = 30
+		mu_22 = 0
+		mu_31 = 10
+		mu_32 = 25
+
+		sigma_11 = 100
+		sigma_12 = 100
+		sigma_21 = 49
+		sigma_22 = 49
+		sigma_31 = 16
+		sigma_32 = 16
+
+		x1 = np.random.normal(mu_11, sigma_11, n1)
+		y1 = np.random.normal(mu_12, sigma_12, n1)
+		x2 = np.random.normal(mu_21, sigma_21, n2)
+		y2 = np.random.normal(mu_22, sigma_22, n2)
+		x3 = np.random.normal(mu_31, sigma_31, n3)
+		y3 = np.random.normal(mu_32, sigma_32, n3)
+
+		class1 = np.column_stack((x1, y1))
+		class2 = np.column_stack((x2, y2))
+		class3 = np.column_stack((x3, y3))
+
+		synthetic = np.vstack((class1, class2, class3))
+		synthetic = scaler.fit_transform(synthetic)
+
+		refClass1 = np.repeat(1, n1)
+		refClass2 = np.repeat(2, n2)
+		refClass3 = np.repeat(3, n3)
+		
+		data_ref = np.concatenate((refClass1, refClass2, refClass3))
+
+		return [synthetic, data_ref, nClasses, "Pimentel2013 - Data 2"]
+	elif id == 11:
+		# (Dataset 3 do 'pimentel2013')
+		n1 = 200
+		n2 = 100
+		n3 = 50
+		
+		n = n1 + n2 + n3 
+		
+		nClasses = 3
+		
+		mu_11 = 0
+		mu_12 = 0
+		mu_21 = 15
+		mu_22 = 3
+		mu_31 = 15
+		mu_32 = -3
+
+		sigma_11 = 100
+		sigma_12 = 4
+		sigma_21 = 100
+		sigma_22 = 4
+		sigma_31 = 100
+		sigma_32 = 4
+
+		x1 = np.random.normal(mu_11, sigma_11, n1)
+		y1 = np.random.normal(mu_12, sigma_12, n1)
+		x2 = np.random.normal(mu_21, sigma_21, n2)
+		y2 = np.random.normal(mu_22, sigma_22, n2)
+		x3 = np.random.normal(mu_31, sigma_31, n3)
+		y3 = np.random.normal(mu_32, sigma_32, n3)
+
+		class1 = np.column_stack((x1, y1))
+		class2 = np.column_stack((x2, y2))
+		class3 = np.column_stack((x3, y3))
+
+		synthetic = np.vstack((class1, class2, class3))
+		synthetic = scaler.fit_transform(synthetic)
+
+		refClass1 = np.repeat(1, n1)
+		refClass2 = np.repeat(2, n2)
+		refClass3 = np.repeat(3, n3)
+		
+		data_ref = np.concatenate((refClass1, refClass2, refClass3))
+
+		return [synthetic, data_ref, nClasses, "Pimentel2013 - Data 3"]
+	elif id == 12:
+		# (Dataset 4 do 'pimentel2013')
+		n1 = 200
+		n2 = 100
+		n3 = 50
+		
+		n = n1 + n2 + n3 
+		
+		nClasses = 3
+		
+		mu_11 = 0
+		mu_12 = 0
+		mu_21 = 15
+		mu_22 = 0
+		mu_31 = -15
+		mu_32 = 0
+
+		sigma_11 = 16
+		sigma_12 = 16
+		sigma_21 = 16
+		sigma_22 = 16
+		sigma_31 = 16
+		sigma_32 = 16
+
+		x1 = np.random.normal(mu_11, sigma_11, n1)
+		y1 = np.random.normal(mu_12, sigma_12, n1)
+		x2 = np.random.normal(mu_21, sigma_21, n2)
+		y2 = np.random.normal(mu_22, sigma_22, n2)
+		x3 = np.random.normal(mu_31, sigma_31, n3)
+		y3 = np.random.normal(mu_32, sigma_32, n3)
+
+		class1 = np.column_stack((x1, y1))
+		class2 = np.column_stack((x2, y2))
+		class3 = np.column_stack((x3, y3))
+
+		synthetic = np.vstack((class1, class2, class3))
+		synthetic = scaler.fit_transform(synthetic)
+
+		refClass1 = np.repeat(1, n1)
+		refClass2 = np.repeat(2, n2)
+		refClass3 = np.repeat(3, n3)
+		
+		data_ref = np.concatenate((refClass1, refClass2, refClass3))
+
+		return [synthetic, data_ref, nClasses, "Pimentel2013 - Data 4"]
+	elif id == 13:
 		# Teste sintetico - Data 1
 		n1 = 200
 		n2 = 100
@@ -189,4 +323,168 @@ def selectDataset(id):
 		data_ref = np.concatenate((refClass1, refClass2))
 
 		return [synthetic, data_ref, nClasses, "Teste sintetico - Data 1"]
-	
+	elif id == 14:
+		# Dataset Sintético 2 elipses
+
+		n1 = 50
+		n2 = 50
+		
+		n = n1 + n2
+		
+		nClasses = 2
+		
+		mu_11 = 0
+		mu_12 = 0
+
+		mu_21 = 50
+		mu_22 = 0
+		
+		sigma_11 = 4
+		sigma_12 = 20
+		
+		sigma_21 = 4
+		sigma_22 = 20
+		
+		x1 = np.random.normal(mu_11, sigma_11, n1)
+		y1 = np.random.normal(mu_12, sigma_12, n1)
+		
+		x2 = np.random.normal(mu_21, sigma_21, n2)
+		y2 = np.random.normal(mu_22, sigma_22, n2)
+		
+
+		class1 = np.column_stack((x1, y1))
+		class2 = np.column_stack((x2, y2))
+
+		synthetic = np.vstack((class1, class2))
+		synthetic = scaler.fit_transform(synthetic)
+
+		refClass1 = np.repeat(1, n1)
+		refClass2 = np.repeat(2, n2)
+		
+		ref = np.concatenate((refClass1, refClass2))
+
+		return [synthetic, ref, nClasses, "2 elipses VER."]
+	elif id == 15:
+		# Dataset Sintético 2 elipses 3D
+
+		n1 = 50
+		n2 = 50
+		
+		n = n1 + n2
+		
+		nClasses = 2
+		
+		mu_11 = 0
+		mu_12 = 0
+		mu_13 = 0
+
+		mu_21 = 20
+		mu_22 = 0
+		mu_23 = 50
+		
+		sigma_11 = 4
+		sigma_12 = 20
+		sigma_13 = 4
+		
+		sigma_21 = 4
+		sigma_22 = 20
+		sigma_23 = 4
+		
+		x1 = np.random.normal(mu_11, sigma_11, n1)
+		y1 = np.random.normal(mu_12, sigma_12, n1)
+		z1 = np.random.normal(mu_13, sigma_13, n1)
+		
+		x2 = np.random.normal(mu_21, sigma_21, n2)
+		y2 = np.random.normal(mu_22, sigma_22, n2)
+		z2 = np.random.normal(mu_23, sigma_23, n2)
+
+		class1 = np.column_stack((x1, y1, z1))
+		class2 = np.column_stack((x2, y2, z2))
+		
+		# class1 = np.column_stack((x1, z1))
+		# class2 = np.column_stack((x2, z2))
+
+		synthetic = np.vstack((class1, class2))
+		synthetic = scaler.fit_transform(synthetic)
+
+		refClass1 = np.repeat(1, n1)
+		refClass2 = np.repeat(2, n2)
+		
+		ref = np.concatenate((refClass1, refClass2))
+
+		return [synthetic, ref, nClasses, "2 elipses 3D"]
+	elif id == 16:
+		n = 210 
+		n_classes = 3 
+
+		mu = np.array([
+			[0, 0],
+			[15, 0],
+			[10, 25] 
+		])
+		sigma = 10
+
+		X_class1 = np.random.multivariate_normal(mu[0], sigma * np.eye(2), size=int(n/3))
+		X_class2 = np.random.multivariate_normal(mu[1], sigma * np.eye(2), size=int(n/3))
+		X_class3 = np.random.multivariate_normal(mu[2], sigma * np.eye(2), size=int(n/3))
+
+		X = np.vstack((X_class1, X_class2, X_class3))
+
+		y_class1 = np.ones(int(n/3)) * 1
+		y_class2 = np.ones(int(n/3)) * 2
+		y_class3 = np.ones(int(n/3)) * 3
+		y = np.hstack((y_class1, y_class2, y_class3))
+
+		synthetic = X
+		data_ref = y
+
+		synthetic = scaler.fit_transform(synthetic)
+
+		return [synthetic, data_ref, n_classes, "Spherical Gaussian Distribution - 3 Classes"]
+	elif id == 17:
+		n = 210				# Dataset Sintético Relação linear
+		nClasses = 3
+
+		mu = np.array([
+			[0, 0],
+			[30, 0],
+			[10, 25] 
+			])
+		sigma = 10
+
+		X_linear = np.random.multivariate_normal(mu[0], sigma * np.eye(2), size=int(n/nClasses))
+		y_linear = np.repeat(1, int(n/nClasses))
+
+		for i in range(1, nClasses):
+			X_linear = np.vstack((X_linear, np.random.multivariate_normal(mu[i], sigma * np.eye(2), size=int(n/nClasses))))
+			y_linear = np.hstack((y_linear, np.repeat(i+1, int(n/nClasses))))
+
+		synthetic = X_linear
+		data_ref_ = y_linear
+
+		synthetic = scaler.fit_transform(synthetic)
+
+		return [synthetic, data_ref_, nClasses, "Relação linear"]
+	elif id == 18:
+		n = 200 
+		n_classes = 3
+
+		mu1 = np.array([0, 0])
+		mu2 = np.array([30, 0])
+		mu3 = np.array([10, 25])
+
+		coef = 0.5
+		base = 2
+
+		X_class1 = mu1 + coef * np.random.rand(n // n_classes, 2)
+		X_class2 = mu2 + coef * (base**np.random.rand(n // n_classes, 1)) * np.random.rand(n // n_classes, 2)
+		X_class3 = mu3 + coef * (base**np.random.rand(n // n_classes, 1)) * np.random.rand(n // n_classes, 2)
+
+		synthetic = np.vstack((X_class1, X_class2, X_class3))
+		synthetic = scaler.fit_transform(synthetic)
+
+		print(synthetic)
+
+		data_ref = np.concatenate((np.repeat(1, n // n_classes), np.repeat(2, n // n_classes), np.repeat(3, n // n_classes)))
+
+		return [synthetic, data_ref, n_classes, "Relação Exponencial"]

@@ -1,0 +1,17 @@
+Seed: 42 | Dataset: Pimentel2013 - Data 1 | K: 5 | MFCM Reps: 10 | Neighbors: 5
+Porcentagem de variaveis cortadas: 0%
+Com filtro MFCM - F1 Score: 0.75 | Tempo: 0.00150299072265625
+Com filtro Mutual - F1 Score: 0.8772875816993464 | Tempo: 0.0010030269622802734
+
+Porcentagem de variaveis cortadas: 25%
+Com filtro MFCM - F1 Score: 0.75 | Tempo: 0.0009770393371582031
+Com filtro Mutual - F1 Score: 0.8772875816993464 | Tempo: 0.0009768009185791016
+
+Porcentagem de variaveis cortadas: 50%
+Com filtro MFCM - F1 Score: 0.6239878542510121 | Tempo: 0.0009772777557373047
+Com filtro Mutual - F1 Score: 0.7519607843137255 | Tempo: 0.0009775161743164062
+
+Porcentagem de variaveis cortadas: 75%
+Com filtro MFCM - F1 Score: 0.6239878542510121 | Tempo: 0.0010027885437011719
+Com filtro Mutual - F1 Score: 0.5222222222222221 | Tempo: 0.00150299072265625
+
