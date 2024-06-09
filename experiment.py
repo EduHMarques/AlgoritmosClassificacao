@@ -274,7 +274,7 @@ def cross_validation(data, target, seed, n_neighbors, n_folds, nFilterRep, nClas
 
 def experimento(indexData, n_neighbors, nFilterRep):
 
-    seed = 42
+    SEED = 42
 
     dataset = selectDataset(indexData)
 
@@ -283,13 +283,13 @@ def experimento(indexData, n_neighbors, nFilterRep):
 
     data, target, nClasses, data_name = dataset
 
-    kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=seed)
+    kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=SEED)
 
     lista_resultados_mfcm = []
 
     for i_externo, (train, test) in enumerate(kfold.split(data, target)):
-        result_mfcm = cross_validation(data[train], target[train], seed, n_neighbors, 5, nFilterRep, nClasses, porcentagemVar, 'MFCM', data_name, i_externo)
-        result_mutual = cross_validation(data[train], target[train], seed, n_neighbors, 5, nFilterRep, nClasses, porcentagemVar, 'MUTUAL', data_name, i_externo)
+        result_mfcm = cross_validation(data[train], target[train], SEED, n_neighbors, 5, nFilterRep, nClasses, porcentagemVar, 'MFCM', data_name, i_externo)
+        result_mutual = cross_validation(data[train], target[train], SEED, n_neighbors, 5, nFilterRep, nClasses, porcentagemVar, 'MUTUAL', data_name, i_externo)
         lista_resultados_mfcm.append(result_mfcm)
 
     f1_avg, accuracy_avg, precision_avg, recall_avg, time_avg, f1_std, accuracy_std, precision_std, recall_std, time_std = media_desvio_padrao(lista_resultados_mfcm)
@@ -311,7 +311,7 @@ def experimento(indexData, n_neighbors, nFilterRep):
     path = f'resultados/{data_name}'
     if not os.path.exists(f'resultados/{data_name}'):
         os.makedirs(path)
-    basics_info = (f'Seed: {seed} | Dataset: {data_name} | K: {n_neighbors} | MFCM Reps: {nFilterRep} | Neighbors: {n_neighbors}')
+    basics_info = (f'Seed: {SEED} | Dataset: {data_name} | K: {n_neighbors} | MFCM Reps: {nFilterRep} | Neighbors: {n_neighbors}')
     variables_cut_info = f'Porcentagens de variaveis cortadas: {porcentagemVar}'
     os.makedirs(f'resultados/{data_name}/resultado_{len(os.listdir(path)) + 1}')
     atualizaTxt(f'resultados/{data_name}/resultado_{len(os.listdir(path))}/parameters.txt', basics_info)

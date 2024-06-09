@@ -321,14 +321,13 @@ def synthetic(indexData, n_neighbors, nFilterRep, mc):
 
 if __name__ == "__main__":
 
+    SEED = 42
+    np.random.seed(SEED)
+    random.seed(SEED)
+
     datasets = [1]
     n_neighbors = 5
     monteCarlo = 1
     nRepMFCM = 10
 
-    synthetic(16, n_neighbors, nRepMFCM, monteCarlo)
-
-    # for _, id in enumerate(datasets):
-        
-    #     experimento(id, n_neighbors, nRepMFCM)
-        
+    synthetic(17, n_neighbors, nRepMFCM, monteCarlo)

@@ -422,11 +422,16 @@ def selectDataset(id):
 			[15, 0],
 			[10, 25] 
 		])
-		sigma = 10
+		sigma = np.array([
+			[1, 10],
+			[5, 1],
+			[3, 5] 
+			])
+		sigma = [np.diag(sigma[i]) for i in range(3)]
 
-		X_class1 = np.random.multivariate_normal(mu[0], sigma * np.eye(2), size=int(n/3))
-		X_class2 = np.random.multivariate_normal(mu[1], sigma * np.eye(2), size=int(n/3))
-		X_class3 = np.random.multivariate_normal(mu[2], sigma * np.eye(2), size=int(n/3))
+		X_class1 = np.random.multivariate_normal(mu[0], sigma[0], size=int(n/3))
+		X_class2 = np.random.multivariate_normal(mu[1], sigma[1], size=int(n/3))
+		X_class3 = np.random.multivariate_normal(mu[2], sigma[2], size=int(n/3))
 
 		X = np.vstack((X_class1, X_class2, X_class3))
 
@@ -450,13 +455,17 @@ def selectDataset(id):
 			[30, 0],
 			[10, 25] 
 			])
-		sigma = 10
+		sigma = np.array([
+			[1, 10],
+			[5, 1],
+			[3, 5] 
+			])
+		sigma = [np.diag(sigma[i]) for i in range(3)]
 
-		X_linear = np.random.multivariate_normal(mu[0], sigma * np.eye(2), size=int(n/nClasses))
+		X_linear = np.random.multivariate_normal(mu[0], sigma[0], size=int(n/nClasses))
 		y_linear = np.repeat(1, int(n/nClasses))
-
 		for i in range(1, nClasses):
-			X_linear = np.vstack((X_linear, np.random.multivariate_normal(mu[i], sigma * np.eye(2), size=int(n/nClasses))))
+			X_linear = np.vstack((X_linear, np.random.multivariate_normal(mu[i], sigma[i], size=int(n/nClasses))))
 			y_linear = np.hstack((y_linear, np.repeat(i+1, int(n/nClasses))))
 
 		synthetic = X_linear
